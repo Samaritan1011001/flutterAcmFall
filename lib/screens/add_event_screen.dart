@@ -99,10 +99,12 @@ class _AddEventScreen extends State<AddEventScreen> {
                 InkWell(
                     onTap: () {
                       FocusScope.of(context).requestFocus(new FocusNode());
-                      String dateFormat =
-                          '${_eventDate.month}-${_eventDate.day}-${_eventDate.year}';
-                      String timeFormat =
-                          '${_eventTime.hour}:${_eventTime.minute}';
+                      String dateFormat = _setDate
+                          ? '${_eventDate.month}-${_eventDate.day}-${_eventDate.year}'
+                          : '';
+                      String timeFormat = _setTime
+                          ? '${_eventTime.hour}:${_eventTime.minute}'
+                          : '';
                       _event = {
                         "eventTitle": _eventTitle,
                         "eventNote": _eventNote,
@@ -243,7 +245,7 @@ class _MoreEventSetting extends State<MoreEventSetting> {
   Widget build(BuildContext context) {
     double _settingYOffSet = widget.isOpen ? 30 : 0;
     String _eventTitle = (widget.eventTitle != null && widget.eventTitle != '')
-        ? ((widget.eventTitle.length >= 14)
+        ? ((widget.eventTitle.length >= 15)
             ? '${widget.eventTitle.substring(0, 15)}...'
             : widget.eventTitle)
         : 'New Event';
