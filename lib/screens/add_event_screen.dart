@@ -9,6 +9,8 @@ class AddEventScreen extends StatefulWidget {
 }
 
 class _AddEventScreen extends State<AddEventScreen> {
+  Map _event = {};
+
   bool _openMoreSetting = false;
   bool _isDone = false;
   String _eventTitle;
@@ -97,9 +99,18 @@ class _AddEventScreen extends State<AddEventScreen> {
                 InkWell(
                     onTap: () {
                       FocusScope.of(context).requestFocus(new FocusNode());
-                      (_eventTitle != null && _eventTitle != '')
-                          ? print("Add Event Done: $_eventTitle")
-                          : print("Empty event");
+                      String dateFormat =
+                          '${_eventDate.month}-${_eventDate.day}-${_eventDate.year}';
+                      String timeFormat =
+                          '${_eventTime.hour}:${_eventTime.minute}';
+                      _event = {
+                        "eventTitle": _eventTitle,
+                        "eventNote": _eventNote,
+                        "eventDate": dateFormat,
+                        "eventTime": timeFormat,
+                        "isDone": _isDone
+                      };
+                      print("New Event Created $_event");
                     },
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
@@ -210,13 +221,13 @@ class MoreEventSetting extends StatefulWidget {
       @required this.closeSetting})
       : super(key: key);
 
-  String eventTitle;
-  String note;
-  bool isOpen;
-  bool setDate;
-  DateTime eventDate;
-  bool setTime;
-  DateTime eventTime;
+  final String eventTitle;
+  final String note;
+  final bool isOpen;
+  final bool setDate;
+  final DateTime eventDate;
+  final bool setTime;
+  final DateTime eventTime;
   final Function onChangeNote;
   final Function toggleDate;
   final Function onChangeDate;
@@ -232,7 +243,9 @@ class _MoreEventSetting extends State<MoreEventSetting> {
   Widget build(BuildContext context) {
     double _settingYOffSet = widget.isOpen ? 30 : 0;
     String _eventTitle = (widget.eventTitle != null && widget.eventTitle != '')
-        ? '${widget.eventTitle.substring(0, 15)}...'
+        ? ((widget.eventTitle.length >= 14)
+            ? '${widget.eventTitle.substring(0, 15)}...'
+            : widget.eventTitle)
         : 'New Event';
 
     return GestureDetector(
