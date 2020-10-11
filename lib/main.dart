@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterAcmFall/screens/home_screen.dart';
+import 'package:flutterAcmFall/screens/add_event_screen.dart';
 
 void main() {
   runApp(MyApp());
