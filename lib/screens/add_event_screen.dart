@@ -215,12 +215,12 @@ class MoreEventSetting extends StatefulWidget {
       this.setDate,
       this.eventTime,
       this.setTime,
-      @required this.onChangeNote,
-      @required this.toggleDate,
-      @required this.onChangeDate,
-      @required this.toggleTime,
-      @required this.onChangeTime,
-      @required this.closeSetting})
+      this.onChangeNote,
+      this.toggleDate,
+      this.onChangeDate,
+      this.toggleTime,
+      this.onChangeTime,
+      this.closeSetting})
       : super(key: key);
 
   final String eventTitle;
