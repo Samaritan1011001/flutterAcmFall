@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterAcmFall/screens/event_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -20,10 +21,10 @@ class HomeScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             Icon(Icons.shopping_basket),
-            Icon(Icons.directions_transit),
+            //Icon(Icons.directions_transit),
+            EventScreen(),
           ],
         ),
-
       ),
     );
   }
