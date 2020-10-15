@@ -8,7 +8,7 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         bottomNavigationBar: Container(
           height: 70,
-          color: Colors.teal,
+          color: Colors.red,
           child: TabBar(
             tabs: [
               Tab(icon: Icon(Icons.list)),
