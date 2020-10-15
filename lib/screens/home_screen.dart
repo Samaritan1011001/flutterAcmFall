@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterAcmFall/screens/event_screen.dart';
+import 'package:flutterAcmFall/screens/event/event_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
