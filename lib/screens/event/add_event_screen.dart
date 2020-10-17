@@ -134,7 +134,7 @@ class _AddEventScreen extends State<AddEventScreen> {
                       contentPadding: EdgeInsets.symmetric(
                           horizontal: 10.0, vertical: 5.0)),
                   style: TextStyle(
-                      fontSize: _event.isDone ? 23 : 20,
+                      fontSize: 20,
                       fontWeight:
                           _event.isDone ? FontWeight.bold : FontWeight.normal,
                       color: Color.fromRGBO(37, 42, 49, 1.0)),

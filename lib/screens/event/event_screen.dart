@@ -31,23 +31,23 @@ class _EventScreen extends State<EventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _openAddEventScreen
-        ? AddEventScreen(closeScreen: _closeAddEvent)
-        : Scaffold(
-            backgroundColor: Color.fromRGBO(235, 239, 245, 1.0),
-            body: SafeArea(
-              child: SingleChildScrollView(
-                  child: Column(
-                      children: _events
-                          .map((event) => EventCard(event: event))
-                          .toList())),
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: _openAddEvent,
-              backgroundColor: Color.fromRGBO(0, 108, 255, 1.0),
-              child: Icon(Icons.add, color: Colors.white),
-            ),
-          );
+    Widget addEventScreen = AddEventScreen(closeScreen: _closeAddEvent);
+    Widget mainEventScreen = Scaffold(
+      backgroundColor: Color.fromRGBO(235, 239, 245, 1.0),
+      body: SafeArea(
+        child: SingleChildScrollView(
+            child: Column(
+                children:
+                    _events.map((event) => EventCard(event: event)).toList())),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _openAddEvent,
+        backgroundColor: Color.fromRGBO(0, 108, 255, 1.0),
+        child: Icon(Icons.add, color: Colors.white),
+      ),
+    );
+
+    return _openAddEventScreen ? addEventScreen : mainEventScreen;
   }
 }
 
