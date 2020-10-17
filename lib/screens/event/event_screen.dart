@@ -34,6 +34,7 @@ class _EventScreen extends State<EventScreen> {
     return _openAddEventScreen
         ? AddEventScreen(closeScreen: _closeAddEvent)
         : Scaffold(
+            backgroundColor: Color.fromRGBO(235, 239, 245, 1.0),
             body: SafeArea(
               child: SingleChildScrollView(
                   child: Column(
@@ -43,8 +44,8 @@ class _EventScreen extends State<EventScreen> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: _openAddEvent,
-              backgroundColor: Colors.white,
-              child: Icon(Icons.add, color: Color.fromRGBO(0, 108, 255, 1.0)),
+              backgroundColor: Color.fromRGBO(0, 108, 255, 1.0),
+              child: Icon(Icons.add, color: Colors.white),
             ),
           );
   }
@@ -91,7 +92,8 @@ class _EventCard extends State<EventCard> {
                                         EdgeInsets.symmetric(vertical: 3.0),
                                     child: Text(widget.event.title,
                                         style: TextStyle(
-                                            fontSize: 18,
+                                            fontSize:
+                                                widget.event.isDone ? 23 : 20,
                                             fontWeight: widget.event.isDone
                                                 ? FontWeight.bold
                                                 : FontWeight.normal,

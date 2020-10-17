@@ -67,8 +67,6 @@ class _AddEventScreen extends State<AddEventScreen> {
       },
       child: Stack(children: <Widget>[
         Column(children: <Widget>[
-          // Header bar: Cancel and Done button
-
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
               child: Row(
@@ -81,7 +79,6 @@ class _AddEventScreen extends State<AddEventScreen> {
                           widget.closeScreen(_event);
                         },
                         isActive: true),
-                    // Done button: Return task obj (or add to task list)
                     DoneButton(
                         onTap: () {
                           FocusScope.of(context).requestFocus(new FocusNode());
@@ -97,8 +94,6 @@ class _AddEventScreen extends State<AddEventScreen> {
                         },
                         isActive: (_event.title != null && _event.title != '')),
                   ])),
-          // Main body: enter Task name and date
-
           Padding(
               padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 20.0),
               child: Row(children: <Widget>[
@@ -110,7 +105,6 @@ class _AddEventScreen extends State<AddEventScreen> {
                       });
                     },
                     isActive: _event.isDone),
-                // Task text
                 Expanded(
                     child: TextField(
                   onChanged: _onChangeEventTitle,
@@ -124,7 +118,7 @@ class _AddEventScreen extends State<AddEventScreen> {
                       contentPadding: EdgeInsets.symmetric(
                           horizontal: 10.0, vertical: 5.0)),
                   style: TextStyle(
-                      fontSize: 20,
+                      fontSize: _event.isDone ? 23 : 20,
                       fontWeight:
                           _event.isDone ? FontWeight.bold : FontWeight.normal,
                       color: Color.fromRGBO(37, 42, 49, 1.0)),
@@ -253,17 +247,14 @@ class _MoreEventSetting extends State<MoreEventSetting> {
             )),
         widget.setDate
             ? Column(children: <Widget>[
-                Container(
-                    color: Colors.white,
-                    height: 150,
-                    child: CupertinoDatePicker(
-                        initialDateTime: widget.event.time,
-                        mode: CupertinoDatePickerMode.date,
-                        onDateTimeChanged: (DateTime date) {
-                          setState(() {
-                            widget.event.date = date;
-                          });
-                        })),
+                DateTimePicker(
+                    initialDateTime: widget.event.time,
+                    mode: CupertinoDatePickerMode.date,
+                    onChangeDateTime: (DateTime date) {
+                      setState(() {
+                        widget.event.date = date;
+                      });
+                    }),
                 Padding(
                     padding: EdgeInsets.only(top: 10),
                     child: Container(
@@ -283,17 +274,14 @@ class _MoreEventSetting extends State<MoreEventSetting> {
                               ])),
                     )),
                 widget.setTime
-                    ? Container(
-                        color: Colors.white,
-                        height: 150,
-                        child: CupertinoDatePicker(
-                            initialDateTime: widget.event.time,
-                            mode: CupertinoDatePickerMode.time,
-                            onDateTimeChanged: (DateTime time) {
-                              setState(() {
-                                widget.event.time = time;
-                              });
-                            }))
+                    ? DateTimePicker(
+                        initialDateTime: widget.event.time,
+                        mode: CupertinoDatePickerMode.time,
+                        onChangeDateTime: (DateTime time) {
+                          setState(() {
+                            widget.event.time = time;
+                          });
+                        })
                     : Container(),
               ])
             : Container(),

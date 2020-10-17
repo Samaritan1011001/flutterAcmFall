@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class DoneButton extends StatelessWidget {
   DoneButton({Key key, this.onTap, this.isActive}) : super(key: key);
@@ -63,17 +63,33 @@ class EventDateFormat extends StatelessWidget {
 
   final DateTime date;
 
+  final Map _months = {
+    1: 'Jan',
+    2: 'Feb',
+    3: 'Mar',
+    4: 'Apr',
+    5: 'May',
+    6: 'Jun',
+    7: 'Jul',
+    8: 'Aug',
+    9: 'Sep',
+    10: 'Oct',
+    11: 'Nov',
+    12: 'Dec'
+  };
+
+  String stringFormat(DateTime date) {
+    return '${_months[date.month]} ${date.day}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(children: <Widget>[
-      Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey),
+      Icon(Icons.calendar_today_outlined, size: 15, color: Colors.grey),
       Padding(
           padding: EdgeInsets.only(left: 6.0),
-          child: Text(DateFormat.MMMd('en_US').format(date),
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey)))
+          child: Text(stringFormat(date),
+              style: TextStyle(fontSize: 15, color: Colors.grey)))
     ]);
   }
 }
@@ -83,17 +99,35 @@ class EventTimeFormat extends StatelessWidget {
 
   final DateTime time;
 
+  String stringFormat(DateTime time) {
+    String meridiem = 'am';
+    int hour = time.hour;
+
+    if (hour >= 12) {
+      meridiem = 'pm';
+    }
+
+    hour %= 12;
+    if (hour == 0) {
+      hour = 12;
+    }
+
+    String minute = time.minute.toString();
+
+    if (minute.length < 2) {
+      minute = '0' + minute;
+    }
+    return '$hour:$minute $meridiem';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(children: <Widget>[
-      Icon(Icons.access_time_outlined, size: 14, color: Colors.grey),
+      Icon(Icons.access_time_outlined, size: 15, color: Colors.grey),
       Padding(
           padding: EdgeInsets.only(left: 6.0),
-          child: Text(DateFormat('h:mm a').format(time),
-              style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey)))
+          child: Text(stringFormat(time),
+              style: TextStyle(fontSize: 15, color: Colors.grey)))
     ]);
   }
 }
@@ -111,5 +145,27 @@ class ToggleButton extends StatelessWidget {
         splashColor: Colors.transparent,
         child: Icon((isActive ? Icons.toggle_on : Icons.toggle_off),
             color: (isActive ? Colors.green : Colors.grey), size: 55));
+  }
+}
+
+class DateTimePicker extends StatelessWidget {
+  DateTimePicker(
+      {Key key, this.mode, this.initialDateTime, this.onChangeDateTime})
+      : super(key: key);
+
+  final CupertinoDatePickerMode mode;
+  final DateTime initialDateTime;
+  final Function onChangeDateTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: Colors.white,
+        height: 150,
+        child: CupertinoDatePicker(
+          initialDateTime: initialDateTime,
+          mode: mode,
+          onDateTimeChanged: onChangeDateTime,
+        ));
   }
 }
