@@ -58,6 +58,22 @@ class _AddEventScreen extends State<AddEventScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Widget backdrop = _openMoreSetting
+        ? AnimatedContainer(
+            curve: Curves.fastLinearToSlowEaseIn,
+            duration: Duration(milliseconds: 1000),
+            color: Color.fromRGBO(180, 180, 180, 80))
+        : Container();
+
+    Widget dateText =
+        _setDate ? EventDateFormat(date: _event.date) : Container();
+
+    Widget timeText = _setTime
+        ? Padding(
+            padding: EdgeInsets.only(left: 10.0),
+            child: EventTimeFormat(time: _event.time))
+        : Container();
+
     return Scaffold(
         body: SafeArea(
             child: GestureDetector(
@@ -132,21 +148,9 @@ class _AddEventScreen extends State<AddEventScreen> {
               ])),
           Padding(
               padding: EdgeInsets.symmetric(horizontal: 60.0),
-              child: Row(children: <Widget>[
-                _setDate ? EventDateFormat(date: _event.date) : Container(),
-                _setTime
-                    ? Padding(
-                        padding: EdgeInsets.only(left: 10.0),
-                        child: EventTimeFormat(time: _event.time))
-                    : Container(),
-              ])),
+              child: Row(children: <Widget>[dateText, timeText])),
         ]),
-        _openMoreSetting
-            ? AnimatedContainer(
-                curve: Curves.fastLinearToSlowEaseIn,
-                duration: Duration(milliseconds: 1000),
-                color: Color.fromRGBO(180, 180, 180, 80))
-            : Container(),
+        backdrop,
         MoreEventSetting(
           event: _event,
           isOpen: _openMoreSetting,
@@ -185,50 +189,30 @@ class MoreEventSetting extends StatefulWidget {
 }
 
 class _MoreEventSetting extends State<MoreEventSetting> {
-  double _settingYOffSet;
-
   @override
   Widget build(BuildContext context) {
-    _settingYOffSet = widget.isOpen ? 25 : MediaQuery.of(context).size.height;
+    double _settingYOffSet =
+        widget.isOpen ? 25 : MediaQuery.of(context).size.height;
     String _eventTitle =
         (widget.event.title != null && widget.event.title != '')
-            ? ((widget.event.title.length >= 15)
-                ? '${widget.event.title.substring(0, 15)}...'
+            ? ((widget.event.title.length >= 22)
+                ? '${widget.event.title.substring(0, 22)}...'
                 : widget.event.title)
             : 'New Event';
 
-    return AnimatedContainer(
-      curve: Curves.fastLinearToSlowEaseIn,
-      duration: Duration(milliseconds: 1000),
-      transform: Matrix4.translationValues(0, _settingYOffSet, 1),
-      decoration: BoxDecoration(
-          color: Color.fromRGBO(235, 239, 245, 1.0),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25.0),
-            topRight: Radius.circular(25.0),
-          )),
-      child: Column(children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(25.0),
-                topRight: Radius.circular(25.0),
-              )),
-          child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(_eventTitle,
-                        style: TextStyle(
-                            color: Color.fromRGBO(37, 42, 49, 1.0),
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold)),
-                    DoneButton(onTap: widget.closeSetting, isActive: true)
-                  ])),
-        ),
-        Padding(
+    Widget timePicker = widget.setTime
+        ? DateTimePicker(
+            initialDateTime: widget.event.time,
+            mode: CupertinoDatePickerMode.time,
+            onChangeDateTime: (DateTime time) {
+              setState(() {
+                widget.event.time = time;
+              });
+            })
+        : Container();
+
+    Widget toggleTimeBar = widget.setDate
+        ? Padding(
             padding: EdgeInsets.only(top: 10),
             child: Container(
               color: Colors.white,
@@ -237,55 +221,77 @@ class _MoreEventSetting extends State<MoreEventSetting> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text("Set date reminder",
+                        Text("Set time reminder",
                             style: TextStyle(
                                 color: Color.fromRGBO(37, 42, 49, 1.0),
                                 fontSize: 18)),
                         ToggleButton(
-                            onTap: widget.toggleDate, isActive: widget.setDate),
+                            onTap: widget.toggleTime, isActive: widget.setTime),
                       ])),
+            ))
+        : Container();
+
+    Widget datePicker = widget.setDate
+        ? DateTimePicker(
+            initialDateTime: widget.event.time,
+            mode: CupertinoDatePickerMode.date,
+            onChangeDateTime: (DateTime date) {
+              setState(() {
+                widget.event.date = date;
+              });
+            })
+        : Container();
+
+    return AnimatedContainer(
+        curve: Curves.fastLinearToSlowEaseIn,
+        duration: Duration(milliseconds: 1000),
+        transform: Matrix4.translationValues(0, _settingYOffSet, 1),
+        decoration: BoxDecoration(
+            color: Color.fromRGBO(235, 239, 245, 1.0),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25.0),
+              topRight: Radius.circular(25.0),
             )),
-        widget.setDate
-            ? Column(children: <Widget>[
-                DateTimePicker(
-                    initialDateTime: widget.event.time,
-                    mode: CupertinoDatePickerMode.date,
-                    onChangeDateTime: (DateTime date) {
-                      setState(() {
-                        widget.event.date = date;
-                      });
-                    }),
-                Padding(
-                    padding: EdgeInsets.only(top: 10),
-                    child: Container(
-                      color: Colors.white,
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 18.0),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Text("Set time reminder",
-                                    style: TextStyle(
-                                        color: Color.fromRGBO(37, 42, 49, 1.0),
-                                        fontSize: 18)),
-                                ToggleButton(
-                                    onTap: widget.toggleTime,
-                                    isActive: widget.setTime),
-                              ])),
-                    )),
-                widget.setTime
-                    ? DateTimePicker(
-                        initialDateTime: widget.event.time,
-                        mode: CupertinoDatePickerMode.time,
-                        onChangeDateTime: (DateTime time) {
-                          setState(() {
-                            widget.event.time = time;
-                          });
-                        })
-                    : Container(),
-              ])
-            : Container(),
-      ]),
-    );
+        child: Column(children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25.0),
+                  topRight: Radius.circular(25.0),
+                )),
+            child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(_eventTitle,
+                          style: TextStyle(
+                              color: Color.fromRGBO(37, 42, 49, 1.0),
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold)),
+                      DoneButton(onTap: widget.closeSetting, isActive: true)
+                    ])),
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Container(
+                color: Colors.white,
+                child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 18.0),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("Set date reminder",
+                              style: TextStyle(
+                                  color: Color.fromRGBO(37, 42, 49, 1.0),
+                                  fontSize: 18)),
+                          ToggleButton(
+                              onTap: widget.toggleDate,
+                              isActive: widget.setDate),
+                        ])),
+              )),
+          Column(children: <Widget>[datePicker, toggleTimeBar, timePicker])
+        ]));
   }
 }

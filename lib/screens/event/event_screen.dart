@@ -62,6 +62,25 @@ class EventCard extends StatefulWidget {
 class _EventCard extends State<EventCard> {
   @override
   Widget build(BuildContext context) {
+    String title = (widget.event.title.length >= 25)
+        ? '${widget.event.title.substring(0, 25)}...'
+        : widget.event.title;
+
+    FontWeight titleWeight =
+        widget.event.isDone ? FontWeight.bold : FontWeight.normal;
+
+    Widget dateText = widget.event.date != null
+        ? Padding(
+            padding: EdgeInsets.only(top: 3.0, bottom: 3.0),
+            child: EventDateFormat(date: widget.event.date))
+        : Container();
+
+    Widget timeText = widget.event.time != null
+        ? Padding(
+            padding: EdgeInsets.only(top: 3.0, bottom: 3.0, left: 10.0),
+            child: EventTimeFormat(time: widget.event.time))
+        : Container();
+
     return Card(
         // debug
         child: InkWell(
@@ -90,31 +109,13 @@ class _EventCard extends State<EventCard> {
                                 Padding(
                                     padding:
                                         EdgeInsets.symmetric(vertical: 3.0),
-                                    child: Text(widget.event.title,
+                                    child: Text(title,
                                         style: TextStyle(
-                                            fontSize:
-                                                widget.event.isDone ? 23 : 20,
-                                            fontWeight: widget.event.isDone
-                                                ? FontWeight.bold
-                                                : FontWeight.normal,
+                                            fontSize: 20,
+                                            fontWeight: titleWeight,
                                             color: Color.fromRGBO(
                                                 37, 42, 49, 1.0)))),
-                                widget.event.date != null
-                                    ? Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 3.0),
-                                        child: Row(children: <Widget>[
-                                          EventDateFormat(
-                                              date: widget.event.date),
-                                          widget.event.time != null
-                                              ? Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 10.0),
-                                                  child: EventTimeFormat(
-                                                      time: widget.event.time))
-                                              : Container()
-                                        ]))
-                                    : Container()
+                                Row(children: <Widget>[dateText, timeText]),
                               ]))
                     ])))));
   }
