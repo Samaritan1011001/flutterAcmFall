@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutterAcmFall/view/widget/event_utils.dart';
-import 'package:flutterAcmFall/objects/Event.dart';
+import 'package:flutterAcmFall/model/objects/Event.dart';
 
 class AddEventScreen extends StatefulWidget {
   AddEventScreen({

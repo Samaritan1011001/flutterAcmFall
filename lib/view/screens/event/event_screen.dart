@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterAcmFall/view/screens/event/add_event_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_utils.dart';
-import 'package:flutterAcmFall/objects/Event.dart';
+import 'package:flutterAcmFall/model/objects/Event.dart';
 
 class EventScreen extends StatefulWidget {
   EventScreen({Key key}) : super(key: key);
