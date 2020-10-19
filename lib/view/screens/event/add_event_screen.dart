@@ -193,6 +193,7 @@ class _MoreEventSetting extends State<MoreEventSetting> {
   Widget build(BuildContext context) {
     double _settingYOffSet =
         widget.isOpen ? 25 : MediaQuery.of(context).size.height;
+
     String _eventTitle =
         (widget.event.title != null && widget.event.title != '')
             ? ((widget.event.title.length >= 22)
