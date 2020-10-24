@@ -10,6 +10,11 @@
       "StackName": "amplify-flutteracmfall-dev-221652",
       "StackId": "arn:aws:cloudformation:us-east-1:233707585058:stack/amplify-flutteracmfall-dev-221652/5eb8e770-15a7-11eb-ab89-0a8a0480d74d",
       "AmplifyAppId": "d2rcgdld5ztjzf"
+    },
+    "categories": {
+      "auth": {
+        "flutteracmfallfa1cad62": {}
+      }
     }
   }
 }
