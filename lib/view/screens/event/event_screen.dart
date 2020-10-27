@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterAcmFall/view/screens/event/add_event_screen.dart';
+import 'package:flutterAcmFall/view/screens/event/event_setting_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
 
@@ -12,6 +13,8 @@ class EventScreen extends StatefulWidget {
 class _EventScreen extends State<EventScreen> {
   List<Event> _events = [];
   bool _openAddEventScreen = false;
+  bool _openSettingScreen = false;
+  Event _cardEvent = Event(title: null, date: null, time: null, isDone: false);
 
   void _openAddEvent() {
     setState(() {
@@ -29,16 +32,38 @@ class _EventScreen extends State<EventScreen> {
     });
   }
 
+  void _closeSettingScreen() {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    setState(() {
+      _openSettingScreen = false;
+    });
+  }
+
+  void _handleChosenCard(Event event) {
+    setState(() {
+      _openSettingScreen = true;
+      _cardEvent = event;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget addEventScreen = AddEventScreen(closeScreen: _closeAddEvent);
+    Widget settingEventScreen = EventSettingScreen(
+        event: _cardEvent,
+        isOpen: _openSettingScreen,
+        closeSetting: _closeSettingScreen);
     Widget mainEventScreen = Scaffold(
       backgroundColor: Color.fromRGBO(235, 239, 245, 1.0),
       body: SafeArea(
         child: SingleChildScrollView(
             child: Column(
-                children:
-                    _events.map((event) => EventCard(event: event)).toList())),
+                children: _events
+                    .map((event) => EventCard(
+                          event: event,
+                          onClickCard: _handleChosenCard,
+                        ))
+                    .toList())),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _openAddEvent,
@@ -47,14 +72,19 @@ class _EventScreen extends State<EventScreen> {
       ),
     );
 
-    return _openAddEventScreen ? addEventScreen : mainEventScreen;
+    return Stack(children: <Widget>[
+      mainEventScreen,
+      _openAddEventScreen ? addEventScreen : Container(),
+      settingEventScreen
+    ]);
   }
 }
 
 class EventCard extends StatefulWidget {
-  EventCard({Key key, this.event}) : super(key: key);
+  EventCard({Key key, this.event, this.onClickCard}) : super(key: key);
 
   final Event event;
+  final Function onClickCard;
 
   _EventCard createState() => _EventCard();
 }
@@ -86,6 +116,7 @@ class _EventCard extends State<EventCard> {
         child: InkWell(
             onTap: () {
               print(widget.event);
+              widget.onClickCard(widget.event);
             },
             child: Container(
                 height: 80,
