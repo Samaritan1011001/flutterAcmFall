@@ -17,7 +17,8 @@ class AddEventScreen extends StatefulWidget {
 }
 
 class _AddEventScreen extends State<AddEventScreen> {
-  Event _event = Event(title: null, date: null, time: null, isDone: false);
+  Event _event =
+      Event(id: null, title: null, date: null, time: null, isDone: false);
 
   bool _openMoreSetting = false;
 

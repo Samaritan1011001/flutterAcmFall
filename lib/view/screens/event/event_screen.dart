@@ -14,7 +14,8 @@ class _EventScreen extends State<EventScreen> {
   List<Event> _events = [];
   bool _openAddEventScreen = false;
   bool _openSettingScreen = false;
-  Event _cardEvent = Event(title: null, date: null, time: null, isDone: false);
+  Event _cardEvent =
+      Event(id: null, title: null, date: null, time: null, isDone: false);
 
   void _openAddEvent() {
     setState(() {
@@ -25,6 +26,7 @@ class _EventScreen extends State<EventScreen> {
   void _closeAddEvent(Event event) {
     FocusScope.of(context).requestFocus(new FocusNode());
     if (event != null) {
+      event.id = _events.length;
       _events.add(event);
     }
     setState(() {
@@ -46,6 +48,17 @@ class _EventScreen extends State<EventScreen> {
     });
   }
 
+  void _handleDeleteCard(Event event) {
+    List<Event> events = _events;
+    events.remove(event);
+    setState(() {
+      _events = events;
+      for (var i = 0; i < _events.length; i++) {
+        _events[i].id = i;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget addEventScreen = AddEventScreen(closeScreen: _closeAddEvent);
@@ -63,6 +76,7 @@ class _EventScreen extends State<EventScreen> {
                     .map((event) => EventCard(
                           event: event,
                           onClickCard: _handleChosenCard,
+                          onDeleteCard: _handleDeleteCard,
                         ))
                     .toList())),
       ),
@@ -82,10 +96,12 @@ class _EventScreen extends State<EventScreen> {
 }
 
 class EventCard extends StatefulWidget {
-  EventCard({Key key, this.event, this.onClickCard}) : super(key: key);
+  EventCard({Key key, this.event, this.onClickCard, this.onDeleteCard})
+      : super(key: key);
 
   final Event event;
   final Function onClickCard;
+  final Function onDeleteCard;
 
   _EventCard createState() => _EventCard();
 }
@@ -123,32 +139,46 @@ class _EventCard extends State<EventCard> {
                 height: 80,
                 child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 18.0),
-                    child: Row(children: <Widget>[
-                      RadioButton(
-                        onTap: () {
-                          setState(() {
-                            widget.event.isDone = !widget.event.isDone;
-                          });
-                        },
-                        isActive: widget.event.isDone,
-                      ),
-                      Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 3.0),
-                                    child: Text(title,
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: titleWeight,
-                                            color: Color.fromRGBO(
-                                                37, 42, 49, 1.0)))),
-                                Row(children: <Widget>[dateText, timeText]),
-                              ]))
-                    ])))));
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Row(children: <Widget>[
+                            RadioButton(
+                              onTap: () {
+                                setState(() {
+                                  widget.event.isDone = !widget.event.isDone;
+                                });
+                              },
+                              isActive: widget.event.isDone,
+                            ),
+                            Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: 3.0),
+                                          child: Text(title,
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: titleWeight,
+                                                  color: Color.fromRGBO(
+                                                      37, 42, 49, 1.0)))),
+                                      Row(children: <Widget>[
+                                        dateText,
+                                        timeText
+                                      ]),
+                                    ]))
+                          ]),
+                          DeleteButton(
+                            onTap: () {
+                              widget.onDeleteCard(widget.event);
+                            },
+                            isActive: true,
+                          ),
+                        ])))));
   }
 }

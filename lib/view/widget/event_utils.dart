@@ -40,6 +40,24 @@ class CancelButton extends StatelessWidget {
   }
 }
 
+class DeleteButton extends StatelessWidget {
+  DeleteButton({Key key, this.onTap, this.isActive}) : super(key: key);
+  final Function onTap;
+  final bool isActive;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        onTap: onTap,
+        highlightColor: Colors.transparent,
+        splashColor: Colors.transparent,
+        child: isActive
+            ? Icon(Icons.delete_outlined,
+                color: Color.fromRGBO(244, 94, 109, 1.0), size: 28)
+            : Icon(Icons.delete_outlined, color: Colors.grey, size: 28));
+  }
+}
+
 class RadioButton extends StatelessWidget {
   RadioButton({Key key, this.onTap, this.isActive}) : super(key: key);
   final Function onTap;
