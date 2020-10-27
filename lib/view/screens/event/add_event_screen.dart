@@ -32,7 +32,6 @@ class _AddEventScreen extends State<AddEventScreen> {
     setState(() {
       _openMoreSetting = !_openMoreSetting;
     });
-    print(_event);
   }
 
   @override
@@ -45,6 +44,11 @@ class _AddEventScreen extends State<AddEventScreen> {
             padding: EdgeInsets.only(left: 10.0),
             child: EventTimeFormat(time: _event.time))
         : Container();
+
+    TextEditingController controller = TextEditingController();
+    controller.text = _event.title;
+    controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length));
 
     return Scaffold(
         body: SafeArea(
@@ -88,6 +92,7 @@ class _AddEventScreen extends State<AddEventScreen> {
                     isActive: _event.isDone),
                 Expanded(
                     child: TextFormField(
+                  controller: controller,
                   onChanged: _onChangeEventTitle,
                   decoration: InputDecoration(
                       hintText: "What do you want to do?",
@@ -118,6 +123,7 @@ class _AddEventScreen extends State<AddEventScreen> {
         EventSettingScreen(
           event: _event,
           isOpen: _openMoreSetting,
+          isEdit: false,
           closeSetting: _toggleMoreSetting,
         ),
       ]),

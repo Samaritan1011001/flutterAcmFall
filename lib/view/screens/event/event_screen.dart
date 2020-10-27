@@ -52,6 +52,7 @@ class _EventScreen extends State<EventScreen> {
     Widget settingEventScreen = EventSettingScreen(
         event: _cardEvent,
         isOpen: _openSettingScreen,
+        isEdit: true,
         closeSetting: _closeSettingScreen);
     Widget mainEventScreen = Scaffold(
       backgroundColor: Color.fromRGBO(235, 239, 245, 1.0),

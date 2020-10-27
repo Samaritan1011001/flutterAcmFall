@@ -53,8 +53,8 @@ class RadioButton extends StatelessWidget {
         splashColor: Colors.transparent,
         child: isActive
             ? Icon(Icons.radio_button_checked,
-                color: Color.fromRGBO(0, 108, 255, 1.0), size: 30)
-            : Icon(Icons.radio_button_unchecked, color: Colors.grey, size: 30));
+                color: Color.fromRGBO(0, 108, 255, 1.0), size: 28)
+            : Icon(Icons.radio_button_unchecked, color: Colors.grey, size: 28));
   }
 }
 
