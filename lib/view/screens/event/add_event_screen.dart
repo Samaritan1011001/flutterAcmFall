@@ -124,7 +124,6 @@ class _AddEventScreen extends State<AddEventScreen> {
         EventSettingScreen(
           event: _event,
           isOpen: _openMoreSetting,
-          isEdit: false,
           closeSetting: _toggleMoreSetting,
         ),
       ]),

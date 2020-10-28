@@ -4,13 +4,11 @@ import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutter/cupertino.dart';
 
 class EventSettingScreen extends StatefulWidget {
-  EventSettingScreen(
-      {Key key, this.event, this.isOpen, this.isEdit, this.closeSetting})
+  EventSettingScreen({Key key, this.event, this.isOpen, this.closeSetting})
       : super(key: key);
 
   final Event event;
   final bool isOpen;
-  final bool isEdit;
   final Function closeSetting;
 
   _EventSettingScreen createState() => _EventSettingScreen();
@@ -140,9 +138,6 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                             horizontal: 18.0, vertical: 5.0)),
                     style: TextStyle(
                         fontSize: 20,
-                        fontWeight: widget.event.isDone
-                            ? FontWeight.bold
-                            : FontWeight.normal,
                         color: Color.fromRGBO(37, 42, 49, 1.0)),
                   )),
               Padding(
