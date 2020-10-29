@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatelessWidget {
+  final User currentUser;    // ⇐ NEW
+  HomeScreen(this.currentUser);
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

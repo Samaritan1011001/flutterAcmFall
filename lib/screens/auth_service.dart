@@ -1,22 +1,19 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class AuthService with ChangeNotifier {
-  var currentUser;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  AuthService() {
-    print("new AuthService");
+  Future<User> getUser() async {
+    return _auth.currentUser;
   }
 
-  Future getUser() {
-    return Future.value(currentUser);
-  }
-
-  // wrappinhg the firebase calls
-  Future logout() {
-    this.currentUser = null;
+  // wrapping the firebase calls
+  Future logout() async {
+    var result = FirebaseAuth.instance.signOut();
     notifyListeners();
-    return Future.value(currentUser);
+    return result;
   }
 
   // wrapping the firebase calls
@@ -24,17 +21,21 @@ class AuthService with ChangeNotifier {
       {String firstName,
       String lastName,
       String email,
-      String password}) async {}
+      String password}) async {
+    return  await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+  }
 
   // logs in the user if password matches
-  Future loginUser({String email, String password}) {
-    if (password == 'password123') {
-      this.currentUser = {'email': email};
+  Future<User> loginUser({String email, String password}) async {
+    try {
+      var result = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+      // since something changed, let's notify the listeners...
       notifyListeners();
-      return Future.value(currentUser);
-    } else {
-      this.currentUser = null;
-      return Future.value(null);
+      return result.user;
+    }  catch (e) {
+      throw new FirebaseAuthException(message: e.message, code: e.code);
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterAcmFall/screens/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -48,13 +49,17 @@ class _LoginPageState extends State<LoginPage> {
 
                 // Validate will return true if is valid, or false if invalid.
                 if (form.validate()) {
-                  var result = await Provider.of<AuthService>(context)
-                              .loginUser(email: _email, password: _password);
-                  if (result != null) {
-                    //Navigator.pushReplacementNamed(context, "/");
-                  } else {
-                    return _buildShowErrorDialog(context,
-                        "Error Logging In With Those Credentials");
+                  try {
+                    User result =
+                        await Provider.of<AuthService>(context).loginUser(
+                            email: _email, password: _password);
+                    print(result);  
+                  } on FirebaseAuthException catch (error) {
+                    // handle the firebase specific error
+                    return _buildErrorDialog(context, error.message);
+                  } on Exception catch (error) {
+                    // gracefully handle anything else that might happen..        
+                    return _buildErrorDialog(context, error.toString());
                   }
                 }
               }),
@@ -65,13 +70,13 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future _buildShowErrorDialog(BuildContext context, _message) {
+  Future _buildErrorDialog(BuildContext context, _message) {
     return showDialog(
       builder: (context) {
         return AlertDialog(
           title: Text('Error Message'),
           content: Text(_message),
-          actions: <Widget>[
+          actions: [
             FlatButton(
                 child: Text('Cancel'),
                 onPressed: () {
