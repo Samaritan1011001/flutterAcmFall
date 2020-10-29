@@ -2,9 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterAcmFall/screens/checklistCreationScreen.dart';
 
-void main(){
-  runApp(ChecklistScreen());
-}
 class ChecklistScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
