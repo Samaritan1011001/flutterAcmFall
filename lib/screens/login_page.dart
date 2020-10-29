@@ -16,55 +16,51 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Login Page Flutter Firebase"),
-      ),
       body: Container(
-        padding: EdgeInsets.all(20.0),
-        child: Form(
-          key: _formKey,
+        color: Colors.white,
+        child: Center(
           child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 20.0),
-              Text(
-                'Login Information',
-                style: TextStyle(fontSize: 20),
-              ),
-              SizedBox(height: 20.0),
-              TextFormField(
-                onSaved: (value) => _email = value,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(labelText: "Email Address")),
-              TextFormField(
-                onSaved: (value) => _password = value,
-                obscureText: true,
-                decoration: InputDecoration(labelText: "Password")),
-              SizedBox(height: 20.0),
-              RaisedButton(
-                child: Text("LOGIN"), 
-                onPressed: () async {
-                // save the fields..
-                final form = _formKey.currentState;
-                form.save();
-
-                // Validate will return true if is valid, or false if invalid.
-                if (form.validate()) {
-                  try {
-                    User result =
-                        await Provider.of<AuthService>(context).loginUser(
-                            email: _email, password: _password);
-                    print(result);  
-                  } on FirebaseAuthException catch (error) {
-                    // handle the firebase specific error
-                    return _buildErrorDialog(context, error.message);
-                  } on Exception catch (error) {
-                    // gracefully handle anything else that might happen..        
-                    return _buildErrorDialog(context, error.toString());
-                  }
-                }
-              }),
+              FlutterLogo(size: 150),
+              SizedBox(height: 50),
+              _signInButton(),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _signInButton() {
+    return OutlineButton(
+      splashColor: Colors.grey,
+      onPressed: () async {
+        User result = await Provider.of<AuthService>(context).signInWithGoogle();
+        print(result);
+      },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+      highlightElevation: 0,
+      borderSide: BorderSide(color: Colors.grey),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image(image: AssetImage("assets/google_logo.png"), height: 35.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                'Sign in with Google',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey,
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -89,4 +85,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
