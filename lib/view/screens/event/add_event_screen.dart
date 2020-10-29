@@ -66,23 +66,32 @@ class _AddEventScreen extends State<AddEventScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     // Cancel button: Return null object
-                    CancelButton(
+                    TextExitButton(
+                        text: "Cancel",
+                        fontWeight: FontWeight.normal,
                         onTap: () {
                           widget.closeScreen(null);
                         },
                         isActive: true),
-                    DoneButton(
-                        onTap: () {
-                          FocusScope.of(context).requestFocus(new FocusNode());
-                          if (_event.title != null) {
-                            if (_event.title.trim() != "") {
-                              widget.closeScreen(_event);
-                            }
+                    TextExitButton(
+                      text: "Done",
+                      fontWeight: (_event.title != null
+                              ? _event.title.trim() != ""
+                              : false)
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        if (_event.title != null) {
+                          if (_event.title.trim() != "") {
+                            widget.closeScreen(_event);
                           }
-                        },
-                        isActive: (_event.title != null
-                            ? _event.title.trim() != ""
-                            : false)),
+                        }
+                      },
+                      isActive: (_event.title != null
+                          ? _event.title.trim() != ""
+                          : false),
+                    ),
                   ])),
           Padding(
               padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 20.0),

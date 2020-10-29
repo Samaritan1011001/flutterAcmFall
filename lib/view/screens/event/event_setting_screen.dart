@@ -117,8 +117,11 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Container(width: 5),
-                              DoneButton(
-                                  onTap: widget.closeSetting, isActive: true)
+                              TextExitButton(
+                                  text: "Done",
+                                  fontWeight: FontWeight.bold,
+                                  onTap: widget.closeSetting,
+                                  isActive: true)
                             ])),
                   )),
               Container(
@@ -137,8 +140,7 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                         contentPadding: EdgeInsets.symmetric(
                             horizontal: 18.0, vertical: 5.0)),
                     style: TextStyle(
-                        fontSize: 20,
-                        color: Color.fromRGBO(37, 42, 49, 1.0)),
+                        fontSize: 20, color: Color.fromRGBO(37, 42, 49, 1.0)),
                   )),
               Padding(
                   padding: EdgeInsets.only(top: 10),

@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DoneButton extends StatelessWidget {
-  DoneButton({Key key, this.onTap, this.isActive}) : super(key: key);
+class TextExitButton extends StatelessWidget {
+  TextExitButton(
+      {Key key, this.text, this.fontWeight, this.onTap, this.isActive})
+      : super(key: key);
+  final String text;
+  final FontWeight fontWeight;
   final Function onTap;
   final bool isActive;
 
@@ -17,26 +21,7 @@ class DoneButton extends StatelessWidget {
                 color:
                     isActive ? Color.fromRGBO(0, 108, 255, 1.0) : Colors.grey,
                 fontSize: 18,
-                fontWeight: isActive ? FontWeight.bold : FontWeight.normal)));
-  }
-}
-
-class CancelButton extends StatelessWidget {
-  CancelButton({Key key, this.onTap, this.isActive}) : super(key: key);
-  final Function onTap;
-  final bool isActive;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-        onTap: onTap,
-        highlightColor: Colors.transparent,
-        splashColor: Colors.transparent,
-        child: Text("Cancel",
-            style: TextStyle(
-              color: isActive ? Color.fromRGBO(0, 108, 255, 1.0) : Colors.grey,
-              fontSize: 18,
-            )));
+                fontWeight: fontWeight)));
   }
 }
 
