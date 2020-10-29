@@ -74,12 +74,12 @@ class _AddEventScreen extends State<AddEventScreen> {
                     DoneButton(
                         onTap: () {
                           FocusScope.of(context).requestFocus(new FocusNode());
-                          if (_event.title.trim() != null ||
+                          if (_event.title != null ||
                               _event.title.trim() != "") {
                             widget.closeScreen(_event);
                           }
                         },
-                        isActive: (_event.title.trim() != null &&
+                        isActive: (_event.title != null &&
                             _event.title.trim() != '')),
                   ])),
           Padding(
