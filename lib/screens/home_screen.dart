@@ -28,3 +28,20 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
+class Nav extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){},
+        child: Icon(Icons.add),
+        foregroundColor: Color.fromRGBO(0,108,255,1),
+        backgroundColor: Colors.white
+
+      ),
+    );
+
+  }
+
+}
