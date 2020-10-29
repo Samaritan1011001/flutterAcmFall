@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterAcmFall/screens/auth_service.dart';
 
 class HomeScreen extends StatelessWidget {
   final User currentUser;    // ⇐ NEW
@@ -10,6 +12,15 @@ class HomeScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            User result =
+                await Provider.of<AuthService>(context).logout();
+            print(result);
+          },
+          tooltip: 'Logout',
+          child: const Icon(Icons.logout),
+        ),
         bottomNavigationBar: Container(
           height: 70,
           color: Colors.teal,
