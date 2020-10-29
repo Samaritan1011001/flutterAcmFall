@@ -17,7 +17,7 @@ class DoneButton extends StatelessWidget {
                 color:
                     isActive ? Color.fromRGBO(0, 108, 255, 1.0) : Colors.grey,
                 fontSize: 18,
-                fontWeight: FontWeight.bold)));
+                fontWeight: isActive ? FontWeight.bold : FontWeight.normal)));
   }
 }
 
