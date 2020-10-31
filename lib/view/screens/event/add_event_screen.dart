@@ -73,7 +73,6 @@ class _AddEventScreen extends State<AddEventScreen> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    // Cancel button: Return null object
                     TextExitButton(
                         text: "Cancel",
                         fontWeight: FontWeight.normal,
@@ -104,7 +103,6 @@ class _AddEventScreen extends State<AddEventScreen> {
           Padding(
               padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 20.0),
               child: Row(children: <Widget>[
-                // Radio Button
                 RadioButton(
                     onTap: () {
                       setState(() {

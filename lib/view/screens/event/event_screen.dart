@@ -139,46 +139,39 @@ class _EventCard extends State<EventCard> {
                 height: 80,
                 child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 18.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          RadioButton(
-                            onTap: () {
-                              setState(() {
-                                widget.event.isDone = !widget.event.isDone;
-                              });
-                            },
-                            isActive: widget.event.isDone,
-                          ),
-                          Expanded(
-                              child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 3.0),
-                                            child: Text(title,
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight: titleWeight,
-                                                    color: Color.fromRGBO(
-                                                        37, 42, 49, 1.0)))),
-                                        Row(children: <Widget>[
-                                          dateText,
-                                          timeText
-                                        ]),
-                                      ]))),
-                          DeleteButton(
-                            onTap: () {
-                              widget.onDeleteCard(widget.event);
-                            },
-                            isActive: true,
-                          ),
-                        ])))));
+                    child: Row(children: <Widget>[
+                      RadioButton(
+                        onTap: () {
+                          setState(() {
+                            widget.event.isDone = !widget.event.isDone;
+                          });
+                        },
+                        isActive: widget.event.isDone,
+                      ),
+                      Expanded(
+                          child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 3.0),
+                                        child: Text(title,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: titleWeight,
+                                                color: Color.fromRGBO(
+                                                    37, 42, 49, 1.0)))),
+                                    Row(children: <Widget>[dateText, timeText]),
+                                  ]))),
+                      DeleteButton(
+                        onTap: () {
+                          widget.onDeleteCard(widget.event);
+                        },
+                        isActive: true,
+                      ),
+                    ])))));
   }
 }
