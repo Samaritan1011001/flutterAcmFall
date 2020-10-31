@@ -3,8 +3,6 @@ import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutter/cupertino.dart';
 
-// TODO: Fix screen problem when open date and time picker
-
 class EventSettingScreen extends StatefulWidget {
   EventSettingScreen(
       {Key key, this.event, this.controller, this.isOpen, this.closeSetting})
