@@ -20,7 +20,19 @@ class _AddEventScreen extends State<AddEventScreen> {
   Event _event =
       Event(id: null, title: null, date: null, time: null, isDone: false);
 
+  TextEditingController _controller = TextEditingController();
+
   bool _openMoreSetting = false;
+
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: _event.title);
+  }
+
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   void _onChangeEventTitle(String title) {
     setState(() {
@@ -32,6 +44,7 @@ class _AddEventScreen extends State<AddEventScreen> {
     FocusScope.of(context).requestFocus(new FocusNode());
     setState(() {
       _openMoreSetting = !_openMoreSetting;
+      _controller.text = _event.title;
     });
   }
 
@@ -45,11 +58,6 @@ class _AddEventScreen extends State<AddEventScreen> {
             padding: EdgeInsets.only(left: 10.0),
             child: EventTimeFormat(time: _event.time))
         : Container();
-
-    TextEditingController controller = TextEditingController();
-    controller.text = _event.title;
-    controller.selection = TextSelection.fromPosition(
-        TextPosition(offset: controller.text.length));
 
     return Scaffold(
         body: SafeArea(
@@ -106,7 +114,7 @@ class _AddEventScreen extends State<AddEventScreen> {
                     isActive: _event.isDone),
                 Expanded(
                     child: TextFormField(
-                  controller: controller,
+                  controller: _controller,
                   onChanged: _onChangeEventTitle,
                   decoration: InputDecoration(
                       hintText: "What do you want to do?",
@@ -136,6 +144,7 @@ class _AddEventScreen extends State<AddEventScreen> {
         ]),
         EventSettingScreen(
           event: _event,
+          controller: _controller,
           isOpen: _openMoreSetting,
           closeSetting: _toggleMoreSetting,
         ),

@@ -16,7 +16,7 @@ class TextExitButton extends StatelessWidget {
         onTap: onTap,
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
-        child: Text("Done",
+        child: Text(text,
             style: TextStyle(
                 color:
                     isActive ? Color.fromRGBO(0, 108, 255, 1.0) : Colors.grey,

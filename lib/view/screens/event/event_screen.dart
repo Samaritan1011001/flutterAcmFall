@@ -64,6 +64,7 @@ class _EventScreen extends State<EventScreen> {
     Widget addEventScreen = AddEventScreen(closeScreen: _closeAddEvent);
     Widget settingEventScreen = EventSettingScreen(
         event: _cardEvent,
+        controller: TextEditingController(text: _cardEvent.title),
         isOpen: _openSettingScreen,
         closeSetting: _closeSettingScreen);
     Widget mainEventScreen = Scaffold(
@@ -141,37 +142,37 @@ class _EventCard extends State<EventCard> {
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Row(children: <Widget>[
-                            RadioButton(
-                              onTap: () {
-                                setState(() {
-                                  widget.event.isDone = !widget.event.isDone;
-                                });
-                              },
-                              isActive: widget.event.isDone,
-                            ),
-                            Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 3.0),
-                                          child: Text(title,
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: titleWeight,
-                                                  color: Color.fromRGBO(
-                                                      37, 42, 49, 1.0)))),
-                                      Row(children: <Widget>[
-                                        dateText,
-                                        timeText
-                                      ]),
-                                    ]))
-                          ]),
+                          RadioButton(
+                            onTap: () {
+                              setState(() {
+                                widget.event.isDone = !widget.event.isDone;
+                              });
+                            },
+                            isActive: widget.event.isDone,
+                          ),
+                          Expanded(
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 3.0),
+                                            child: Text(title,
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: titleWeight,
+                                                    color: Color.fromRGBO(
+                                                        37, 42, 49, 1.0)))),
+                                        Row(children: <Widget>[
+                                          dateText,
+                                          timeText
+                                        ]),
+                                      ]))),
                           DeleteButton(
                             onTap: () {
                               widget.onDeleteCard(widget.event);
