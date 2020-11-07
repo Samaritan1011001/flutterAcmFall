@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -31,7 +32,14 @@ class AuthService with ChangeNotifier {
       final User currentUser = _auth.currentUser;
       assert(user.uid == currentUser.uid);
 
-      print('signInWithGoogle succeeded: $user');
+      FirebaseFirestore.instance.collection("users").doc(user.uid).set(
+      {
+        "username" : user.displayName,
+        "email:" : user.email,
+      },SetOptions(merge: true)).then((_){
+        print("Create user in firestore success!");
+      });
+
       notifyListeners();
       return user;
     }
