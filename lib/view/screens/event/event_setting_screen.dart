@@ -92,16 +92,30 @@ class _EventSettingScreen extends State<EventSettingScreen> {
             })
         : Container();
 
-    return SafeArea(
-        child: AnimatedContainer(
-            curve: Curves.fastLinearToSlowEaseIn,
-            duration: Duration(milliseconds: 1000),
-            height: MediaQuery.of(context).size.height,
-            transform: Matrix4.translationValues(
-                0, widget.isOpen ? 0 : MediaQuery.of(context).size.height, 1),
-            decoration:
-                BoxDecoration(color: Color.fromRGBO(235, 239, 245, 1.0)),
-            child: GestureDetector(
+    return AnimatedContainer(
+        curve: Curves.fastLinearToSlowEaseIn,
+        duration: Duration(milliseconds: 1000),
+        height: MediaQuery.of(context).size.height,
+        transform: Matrix4.translationValues(
+            0, widget.isOpen ? 0 : MediaQuery.of(context).size.height, 1),
+        decoration: BoxDecoration(color: Color.fromRGBO(235, 239, 245, 1.0)),
+        child: Scaffold(
+            appBar: AppBar(
+                toolbarHeight: 60,
+                backgroundColor: Colors.white,
+                bottomOpacity: 0.0,
+                elevation: 0.0,
+                actions: <Widget>[
+                  Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 16.0, vertical: 20),
+                      child: TextExitButton(
+                          text: "Done",
+                          fontWeight: FontWeight.bold,
+                          onTap: widget.closeSetting,
+                          isActive: true))
+                ]),
+            body: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onTap: () {
                   FocusScope.of(context).requestFocus(new FocusNode());
@@ -109,43 +123,26 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                 child: SingleChildScrollView(
                     child: Column(children: <Widget>[
                   Padding(
-                      padding: EdgeInsets.only(bottom: 10),
+                      padding: EdgeInsets.only(top: 10),
                       child: Container(
-                        color: Colors.white,
-                        child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 20.0),
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Container(width: 5),
-                                  TextExitButton(
-                                      text: "Done",
-                                      fontWeight: FontWeight.bold,
-                                      onTap: widget.closeSetting,
-                                      isActive: true)
-                                ])),
-                      )),
-                  Container(
-                      height: 50,
-                      color: Colors.white,
-                      child: TextFormField(
-                        controller: widget.controller,
-                        onChanged: _handleChangeTitle,
-                        decoration: InputDecoration(
-                            hintText: "What do you want to do?",
-                            hintStyle: TextStyle(
-                                fontSize: 18,
-                                color: Colors.grey,
-                                fontWeight: FontWeight.normal),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 18.0, vertical: 5.0)),
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Color.fromRGBO(37, 42, 49, 1.0)),
-                      )),
+                          height: 50,
+                          color: Colors.white,
+                          child: TextFormField(
+                            controller: widget.controller,
+                            onChanged: _handleChangeTitle,
+                            decoration: InputDecoration(
+                                hintText: "What do you want to do?",
+                                hintStyle: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.normal),
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 18.0, vertical: 5.0)),
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Color.fromRGBO(37, 42, 49, 1.0)),
+                          ))),
                   Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: Container(

@@ -68,18 +68,65 @@ class _EventScreen extends State<EventScreen> {
         isOpen: _openSettingScreen,
         closeSetting: _closeSettingScreen);
     Widget mainEventScreen = Scaffold(
-      backgroundColor: Color.fromRGBO(235, 239, 245, 1.0),
-      body: SafeArea(
-        child: SingleChildScrollView(
-            child: Column(
-                children: _events
-                    .map((event) => EventCard(
-                          event: event,
-                          onClickCard: _handleChosenCard,
-                          onDeleteCard: _handleDeleteCard,
-                        ))
-                    .toList())),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        toolbarHeight: 100,
+        backgroundColor: Colors.transparent,
+        bottomOpacity: 0.0,
+        elevation: 0.0,
+        title:
+            Text("Today", style: TextStyle(fontSize: 35, color: Colors.black)),
+        actions: <Widget>[
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 38, horizontal: 16.0),
+              child: TextExitButton(
+                  text: "Edit",
+                  fontWeight: FontWeight.normal,
+                  onTap: () {},
+                  isActive: true)),
+        ],
       ),
+      body: SafeArea(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: SingleChildScrollView(
+                  child: Column(
+                      children: _events
+                          .map((event) => EventCard(
+                                event: event,
+                                onClickCard: _handleChosenCard,
+                                onDeleteCard: _handleDeleteCard,
+                              ))
+                          .toList())),
+            ),
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+                child: Container(
+                    height: 100,
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(244, 94, 109, 1),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 40, vertical: 23),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              Text("My Events",
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white)),
+                              Text("${_events.length} events",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color:
+                                          Color.fromRGBO(244, 244, 244, 0.5)))
+                            ]))))
+          ])),
       floatingActionButton: FloatingActionButton(
         onPressed: _openAddEvent,
         backgroundColor: Color.fromRGBO(0, 108, 255, 1.0),
@@ -128,50 +175,64 @@ class _EventCard extends State<EventCard> {
             child: EventTimeFormat(time: widget.event.time))
         : Container();
 
-    return Card(
-        // debug
-        child: InkWell(
+    return // debug
+        InkWell(
             onTap: () {
               print(widget.event);
               widget.onClickCard(widget.event);
             },
             child: Container(
-                height: 80,
-                child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 18.0),
-                    child: Row(children: <Widget>[
-                      RadioButton(
-                        onTap: () {
-                          setState(() {
-                            widget.event.isDone = !widget.event.isDone;
-                          });
-                        },
-                        isActive: widget.event.isDone,
-                      ),
-                      Expanded(
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 3.0),
-                                        child: Text(title,
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: titleWeight,
-                                                color: Color.fromRGBO(
-                                                    37, 42, 49, 1.0)))),
-                                    Row(children: <Widget>[dateText, timeText]),
-                                  ]))),
-                      DeleteButton(
-                        onTap: () {
-                          widget.onDeleteCard(widget.event);
-                        },
-                        isActive: true,
-                      ),
-                    ])))));
+                height: 70,
+                decoration: BoxDecoration(
+                    border: Border(
+                        bottom: BorderSide(
+                            color: Color.fromRGBO(235, 239, 245, 1.0),
+                            width: 2))),
+                child: InkWell(
+                    onTap: () {
+                      print(widget.event);
+                      widget.onClickCard(widget.event);
+                    },
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 18.0),
+                        child: Row(children: <Widget>[
+                          RadioButton(
+                            onTap: () {
+                              setState(() {
+                                widget.event.isDone = !widget.event.isDone;
+                              });
+                            },
+                            isActive: widget.event.isDone,
+                          ),
+                          Expanded(
+                              child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 3.0),
+                                            child: Text(title,
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: titleWeight,
+                                                    color: Color.fromRGBO(
+                                                        37, 42, 49, 1.0)))),
+                                        Row(children: <Widget>[
+                                          dateText,
+                                          timeText
+                                        ]),
+                                      ]))),
+                          DeleteButton(
+                            onTap: () {
+                              widget.onDeleteCard(widget.event);
+                            },
+                            isActive: true,
+                          ),
+                        ])))));
   }
 }
