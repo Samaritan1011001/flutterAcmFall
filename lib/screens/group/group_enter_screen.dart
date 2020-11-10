@@ -17,10 +17,13 @@ class GroupEnterScreen extends StatelessWidget {
             children: <Widget>[
               FlutterLogo(size: 150),
               SizedBox(height: 50),
-              _helloText(context),
-              SizedBox(height: 25),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                child: _helloText(context),
+              ),
+              SizedBox(height: 50),
               _createGroupButton(context),
-              SizedBox(height: 25),
+              SizedBox(height: 20),
               _joinGroupButton(context),
             ],
           ),
