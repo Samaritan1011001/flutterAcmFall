@@ -15,6 +15,8 @@ class GroupEnterScreen extends StatelessWidget {
             children: <Widget>[
               FlutterLogo(size: 150),
               SizedBox(height: 50),
+              _helloText(),
+              SizedBox(height: 25),
               _createGroupButton(),
               SizedBox(height: 25),
               _joinGroupButton(),
@@ -25,12 +27,27 @@ class GroupEnterScreen extends StatelessWidget {
     );
   }
 
+  Widget _helloText() {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.black
+        ),
+        children: <TextSpan>[
+          TextSpan(text: 'Hello '),
+          TextSpan(text: 'User', style: TextStyle(fontWeight: FontWeight.bold)), // TODO: change User to username
+          TextSpan(text: ', please create a group or join an exist one!'),
+        ],
+      ),
+    );
+  }
+
   Widget _createGroupButton() {
     return OutlineButton(
       splashColor: Colors.grey,
-      onPressed: () async {
-        
-      },
+      onPressed: () async {},
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       highlightElevation: 0,
       borderSide: BorderSide(color: Colors.grey),
@@ -59,9 +76,7 @@ class GroupEnterScreen extends StatelessWidget {
   Widget _joinGroupButton() {
     return OutlineButton(
       splashColor: Colors.grey,
-      onPressed: () async {
-        
-      },
+      onPressed: () async {},
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       highlightElevation: 0,
       borderSide: BorderSide(color: Colors.grey),
