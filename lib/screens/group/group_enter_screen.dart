@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterAcmFall/screens/group/group_create_screen.dart';
+import 'package:flutterAcmFall/screens/group/group_join_screen.dart';
 
 class GroupEnterScreen extends StatelessWidget {
   @override
@@ -15,11 +17,11 @@ class GroupEnterScreen extends StatelessWidget {
             children: <Widget>[
               FlutterLogo(size: 150),
               SizedBox(height: 50),
-              _helloText(),
+              _helloText(context),
               SizedBox(height: 25),
-              _createGroupButton(),
+              _createGroupButton(context),
               SizedBox(height: 25),
-              _joinGroupButton(),
+              _joinGroupButton(context),
             ],
           ),
         ),
@@ -27,7 +29,7 @@ class GroupEnterScreen extends StatelessWidget {
     );
   }
 
-  Widget _helloText() {
+  Widget _helloText(BuildContext context) {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
@@ -44,10 +46,15 @@ class GroupEnterScreen extends StatelessWidget {
     );
   }
 
-  Widget _createGroupButton() {
+  Widget _createGroupButton(BuildContext context) {
     return OutlineButton(
       splashColor: Colors.grey,
-      onPressed: () async {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => GroupCreateScreen()),
+        );
+      },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       highlightElevation: 0,
       borderSide: BorderSide(color: Colors.grey),
@@ -73,10 +80,15 @@ class GroupEnterScreen extends StatelessWidget {
     );
   }
 
-  Widget _joinGroupButton() {
+  Widget _joinGroupButton(BuildContext context) {
     return OutlineButton(
       splashColor: Colors.grey,
-      onPressed: () async {},
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => GroupJoinScreen()),
+        );
+      },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       highlightElevation: 0,
       borderSide: BorderSide(color: Colors.grey),
