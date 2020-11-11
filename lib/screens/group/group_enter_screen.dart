@@ -5,6 +5,9 @@ import 'package:flutterAcmFall/screens/group/group_create_screen.dart';
 import 'package:flutterAcmFall/screens/group/group_join_screen.dart';
 
 class GroupEnterScreen extends StatelessWidget {
+  final Map<String, dynamic> userdata;
+  GroupEnterScreen(this.userdata);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,13 +39,14 @@ class GroupEnterScreen extends StatelessWidget {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.black
-        ),
+        style: TextStyle(fontSize: 18, color: Colors.black),
         children: <TextSpan>[
           TextSpan(text: 'Hello '),
-          TextSpan(text: 'User', style: TextStyle(fontWeight: FontWeight.bold)), // TODO: change User to username
+          TextSpan(
+              text: this.userdata["username"],
+              style: TextStyle(
+                  fontWeight:
+                      FontWeight.bold)),
           TextSpan(text: ', please create a group or join an exist one!'),
         ],
       ),
