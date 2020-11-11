@@ -81,10 +81,15 @@ class MyApp extends StatelessWidget {
 class LoadingCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: CircularProgressIndicator(),
-        alignment: Alignment(0.0, 0.0),
+    return Scaffold(
+      body: Container(
+        color: Colors.white,
+        child: Center(
+          child: Container(
+            child: CircularProgressIndicator(),
+            alignment: Alignment(0.0, 0.0),
+          ),
+        ),
       ),
     );
   }
