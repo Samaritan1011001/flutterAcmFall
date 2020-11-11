@@ -7,8 +7,29 @@ class GroupJoinScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text("Join a group"),
       ),
-      body: Center(
-        
+      body: Column(
+        children: <Widget>[
+          TextFormField(
+            decoration: const InputDecoration(
+              hintText: 'Enter your group key',
+            ),
+            validator: (value) {
+              if (value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                
+              },
+              child: Text('Join'),
+            ),
+          ),
+        ],
       ),
     );
   }
