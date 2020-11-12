@@ -6,14 +6,14 @@ import 'package:flutter/cupertino.dart';
 
 class AuthService with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<User> getUser() async {
     return _auth.currentUser;
   }
 
   Future<User> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
 
@@ -32,11 +32,10 @@ class AuthService with ChangeNotifier {
       final User currentUser = _auth.currentUser;
       assert(user.uid == currentUser.uid);
 
-      FirebaseFirestore.instance.collection("users").doc(user.uid).set(
-      {
-        "username" : user.displayName,
-        "email:" : user.email,
-      },SetOptions(merge: true)).then((_){
+      FirebaseFirestore.instance.collection("users").doc(user.uid).set({
+        "username": user.displayName,
+        "email:": user.email,
+      }, SetOptions(merge: true)).then((_) {
         print("Create user in firestore success!");
       });
 
@@ -49,7 +48,7 @@ class AuthService with ChangeNotifier {
 
   Future signOutGoogle() async {
     var result = FirebaseAuth.instance.signOut();
-    await googleSignIn.signOut();
+    await _googleSignIn.signOut();
     notifyListeners();
     return result;
   }
