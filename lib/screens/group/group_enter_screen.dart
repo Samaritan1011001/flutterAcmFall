@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterAcmFall/screens/group/group_create_screen.dart';
 import 'package:flutterAcmFall/screens/group/group_join_screen.dart';
+import 'package:flutterAcmFall/screens/auth_service.dart';
 
 class GroupEnterScreen extends StatelessWidget {
   final Map<String, dynamic> userdata;
@@ -11,6 +12,13 @@ class GroupEnterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          await Provider.of<AuthService>(context).signOutGoogle();
+        },
+        tooltip: 'Logout',
+        child: const Icon(Icons.logout),
+      ),
       body: Container(
         color: Colors.white,
         child: Center(

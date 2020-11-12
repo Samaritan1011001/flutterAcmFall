@@ -14,9 +14,7 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            User result =
-                await Provider.of<AuthService>(context).signOutGoogle();
-            print(result);
+            await Provider.of<AuthService>(context).signOutGoogle();
           },
           tooltip: 'Logout',
           child: const Icon(Icons.logout),
