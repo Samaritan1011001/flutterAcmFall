@@ -42,38 +42,46 @@ class MyApp extends StatelessWidget {
             }
 
             // redirect to the proper page
-            if (snapshot.hasData) {
-              final User currentUser = snapshot.data;
-              CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
-              return FutureBuilder<DocumentSnapshot>(
-                future: userCollection.doc(currentUser.uid).get(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<DocumentSnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    print("error");
-                    return Text(snapshot.error.toString());
-                  }
-
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    Map<String, dynamic> userdata = snapshot.data.data();
-                    return userdata.containsKey("group")
-                        ? HomeScreen(userdata)
-                        : GroupEnterScreen(userdata);
-                  }
-                  // show loading indicator
-                  return LoadingCircle();
-                },
-              );
-            }
-
-            // no user login data
-            return LoginPage();
+            return snapshot.hasData
+                ? CheckUserGroup(snapshot.data)
+                : LoginPage();
           } else {
             // show loading indicator
             return LoadingCircle();
           }
         },
       ),
+    );
+  }
+}
+
+class CheckUserGroup extends StatelessWidget {
+  // navigate to group enter screen if user doesn't have any group
+  CheckUserGroup(this._currentUser);
+  final User _currentUser;
+  final CollectionReference _userCollection =
+      FirebaseFirestore.instance.collection('users');
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<DocumentSnapshot>(
+      future: _userCollection.doc(_currentUser.uid).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        if (snapshot.hasError) {
+          print("error");
+          return Text(snapshot.error.toString());
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> userdata = snapshot.data.data();
+          return userdata.containsKey("group")
+              ? HomeScreen(userdata)
+              : GroupEnterScreen(userdata);
+        }
+        // show loading indicator
+        return LoadingCircle();
+      },
     );
   }
 }
