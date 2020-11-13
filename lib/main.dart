@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: FutureBuilder<User>(
         // get the Provider, and call the getUser method
-        future: Provider.of<AuthService>(context).getUser(),
+        future: Provider.of<AuthService>(context).checkUser(),
         // wait for the future to resolve and render the appropriate
         // widget for HomePage or LoginPage
         builder: (context, AsyncSnapshot<User> snapshot) {
@@ -76,7 +76,7 @@ class CheckUserGroup extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           Map<String, dynamic> userdata = snapshot.data.data();
           return userdata.containsKey("group")
-              ? HomeScreen(userdata)
+              ? HomeScreen()
               : GroupEnterScreen(userdata);
         }
         // show loading indicator

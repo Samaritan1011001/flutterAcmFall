@@ -4,9 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterAcmFall/screens/auth_service.dart';
 
 class HomeScreen extends StatelessWidget {
-  final Map<String, dynamic> userdata; // ⇐ NEW
-  HomeScreen(this.userdata);
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
