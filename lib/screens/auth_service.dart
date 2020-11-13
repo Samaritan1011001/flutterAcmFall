@@ -8,7 +8,11 @@ class AuthService with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  Future<User> getUser() async {
+  Future<User> checkUser() async {
+    return _auth.currentUser;
+  }
+
+  User getUser() {
     return _auth.currentUser;
   }
 
