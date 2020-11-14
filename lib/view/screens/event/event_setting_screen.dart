@@ -164,8 +164,9 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                                       isActive: widget.event.date != null),
                                 ])),
                       )),
-                  Column(
-                      children: <Widget>[datePicker, toggleTimeBar, timePicker])
+                  datePicker,
+                  toggleTimeBar,
+                  timePicker
                 ])))));
   }
 }

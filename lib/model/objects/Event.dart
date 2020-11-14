@@ -1,13 +1,15 @@
+import 'package:flutterAcmFall/model/objects/User.dart';
+
 class Event {
-  int id;
   String title;
   DateTime date;
   DateTime time;
   bool isDone;
+  User user;
 
-  Event({this.id, this.title, this.date, this.time, this.isDone});
+  Event({this.title, this.date, this.time, this.isDone, this.user});
 
   String toString() {
-    return '$id: {title: ${this.title}, date: ${this.date}, time: ${this.time}, isDone: ${this.isDone}}';
+    return '{title: ${this.title}, date: ${this.date}, time: ${this.time}, isDone: ${this.isDone}, user: $user}';
   }
 }

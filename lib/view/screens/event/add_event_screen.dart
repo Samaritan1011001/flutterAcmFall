@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutterAcmFall/view/screens/event/event_setting_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
-import 'package:flutterAcmFall/view/screens/event/event_setting_screen.dart';
 
 class AddEventScreen extends StatefulWidget {
   AddEventScreen({
@@ -18,7 +18,7 @@ class AddEventScreen extends StatefulWidget {
 
 class _AddEventScreen extends State<AddEventScreen> {
   Event _event =
-      Event(id: null, title: null, date: null, time: null, isDone: false);
+      Event(title: null, date: null, time: null, isDone: false, user: null);
 
   TextEditingController _controller = TextEditingController();
 
@@ -109,7 +109,9 @@ class _AddEventScreen extends State<AddEventScreen> {
                                         style: TextStyle(fontSize: 16))),
                                 actions: <Widget>[
                                   CupertinoDialogAction(
-                                    child: Text("Ok"),
+                                    child: Text("Ok",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
                                     onPressed: () {
                                       Navigator.of(context).pop(false);
                                     },
@@ -165,7 +167,7 @@ class _AddEventScreen extends State<AddEventScreen> {
                           color: Color.fromRGBO(0, 108, 255, 1.0), size: 25)),
                 ])),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60.0),
+                padding: EdgeInsets.symmetric(horizontal: 56.0),
                 child: Row(children: <Widget>[dateText, timeText])),
           ]),
         ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutterAcmFall/view/screens/event/add_event_screen.dart';
-import 'package:flutterAcmFall/view/screens/event/event_setting_screen.dart';
+import 'package:flutterAcmFall/view/screens/event/user_event_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_list.dart';
-import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
+import 'package:flutterAcmFall/model/objects/User.dart';
+import 'package:flutterAcmFall/model/mock_data.dart';
 
 class EventScreen extends StatefulWidget {
   EventScreen({Key key}) : super(key: key);
@@ -12,129 +12,101 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreen extends State<EventScreen> {
-  List<Event> _events = [];
-  bool _openAddEventScreen = false;
-  bool _openSettingScreen = false;
-  Event _cardEvent =
-      Event(id: null, title: null, date: null, time: null, isDone: false);
+  List<Event> _events = MockData().getDataList();
+  //List<Event> _events = [];
+  User _user = User(id: "1234567", color: Color.fromRGBO(244, 94, 109, 1.0));
+  bool _openUserEventScreen = false;
 
-  void _openAddEvent() {
+  void _handleOpenUserEventScreen() {
     setState(() {
-      _openAddEventScreen = true;
+      _openUserEventScreen = true;
     });
   }
 
-  void _closeAddEvent(Event event) {
-    FocusScope.of(context).requestFocus(new FocusNode());
-    if (event != null) {
-      event.id = _events.length;
-      _events.add(event);
-    }
+  void _handleCloseUserEventScreen() {
     setState(() {
-      _openAddEventScreen = !_openAddEventScreen;
+      _openUserEventScreen = false;
     });
   }
 
-  void _closeSettingScreen() {
-    FocusScope.of(context).requestFocus(new FocusNode());
+  void _handleDeleteEvent(Event event) {
     setState(() {
-      _openSettingScreen = false;
-    });
-  }
-
-  void _handleClickCard(Event event) {
-    setState(() {
-      _openSettingScreen = true;
-      _cardEvent = event;
-    });
-  }
-
-  void _handleDeleteCard(Event event) {
-    List<Event> events = _events;
-    events.remove(event);
-    setState(() {
-      _events = events;
-      for (var i = 0; i < _events.length; i++) {
-        _events[i].id = i;
-      }
+      _events.remove(event);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget addEventScreen = AddEventScreen(closeScreen: _closeAddEvent);
-    Widget settingEventScreen = EventSettingScreen(
-        event: _cardEvent,
-        controller: TextEditingController(text: _cardEvent.title),
-        isOpen: _openSettingScreen,
-        closeSetting: _closeSettingScreen);
+    List<Event> userEvents = [];
+    for (int i = 0; i < _events.length; i++) {
+      if (_events[i].user.id == _user.id) {
+        userEvents.add(_events[i]);
+      }
+    }
+
+    Widget userEventScreen = UserEventScreen(
+      events: _events,
+      user: _user,
+      isOpen: _openUserEventScreen,
+      closeUserEventScreen: _handleCloseUserEventScreen,
+    );
     Widget mainEventScreen = Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: Colors.transparent,
-        bottomOpacity: 0.0,
-        elevation: 0.0,
-        title:
-            Text("Today", style: TextStyle(fontSize: 35, color: Colors.black)),
-        actions: <Widget>[
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 38, horizontal: 16.0),
-              child: TextExitButton(
-                  text: "Edit",
-                  fontWeight: FontWeight.normal,
-                  onTap: () {},
-                  isActive: true)),
-        ],
-      ),
-      body: SafeArea(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
+          toolbarHeight: 80,
+          backgroundColor: Colors.white,
+          shadowColor: Colors.transparent,
+          title: Text("Share Events",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30))),
+      body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
             Container(
+                height: MediaQuery.of(context).size.height * 0.6,
                 child: EventList(
-              events: _events,
-              handleClickEvent: _handleClickCard,
-              handleDeleteEvent: _handleDeleteCard,
-            )),
+                  events: _events,
+                  modeIsEdit: true,
+                  handleClickEvent: (Event event) {
+                    print(event);
+                  },
+                  handleDeleteEvent: _handleDeleteEvent,
+                )),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-                child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                        color: Color.fromRGBO(244, 94, 109, 1),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 23),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              Text("My Events",
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white)),
-                              _events.length > 0
-                                  ? Text("${_events.length} events",
+                child: InkWell(
+                    onTap: _handleOpenUserEventScreen,
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    child: Container(
+                        height: 100,
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(244, 94, 109, 1.0),
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 40),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                                  Text("My Events",
                                       style: TextStyle(
-                                          fontSize: 18,
-                                          color: Color.fromRGBO(
-                                              244, 244, 244, 0.5)))
-                                  : Container()
-                            ]))))
-          ])),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _openAddEvent,
-        backgroundColor: Color.fromRGBO(0, 108, 255, 1.0),
-        child: Icon(Icons.add, color: Colors.white),
-      ),
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white)),
+                                  userEvents.length > 0
+                                      ? Text("${userEvents.length} events",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Color.fromRGBO(
+                                                  244, 244, 244, 0.5)))
+                                      : Container()
+                                ])))))
+          ]),
     );
 
-    return Stack(children: <Widget>[
-      mainEventScreen,
-      _openAddEventScreen ? addEventScreen : Container(),
-      settingEventScreen
-    ]);
+    return Stack(children: <Widget>[mainEventScreen, userEventScreen]);
   }
 }

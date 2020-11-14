@@ -3,10 +3,16 @@ import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
 
 class EventCard extends StatefulWidget {
-  EventCard({Key key, this.event, this.onClickEvent, this.onDeleteEvent})
+  EventCard(
+      {Key key,
+      this.event,
+      this.modeIsEdit,
+      this.onClickEvent,
+      this.onDeleteEvent})
       : super(key: key);
 
   final Event event;
+  final bool modeIsEdit;
   final Function onClickEvent;
   final Function onDeleteEvent;
 
@@ -20,8 +26,8 @@ class _EventCard extends State<EventCard> {
         ? '${widget.event.title.substring(0, 25)}...'
         : widget.event.title;
 
-    FontWeight titleWeight =
-        widget.event.isDone ? FontWeight.bold : FontWeight.normal;
+    Color titleColor =
+        widget.event.isDone ? Colors.grey : Color.fromRGBO(37, 42, 49, 1.0);
 
     Widget dateText = widget.event.date != null
         ? Padding(
@@ -44,9 +50,10 @@ class _EventCard extends State<EventCard> {
                         color: Color.fromRGBO(235, 239, 245, 1.0), width: 2))),
             child: InkWell(
                 onTap: () {
-                  print(widget.event);
                   widget.onClickEvent(widget.event);
                 },
+                highlightColor: Colors.transparent,
+                splashColor: Colors.transparent,
                 child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 18.0),
                     child: Row(children: <Widget>[
@@ -71,17 +78,18 @@ class _EventCard extends State<EventCard> {
                                         child: Text(title,
                                             style: TextStyle(
                                                 fontSize: 20,
-                                                fontWeight: titleWeight,
-                                                color: Color.fromRGBO(
-                                                    37, 42, 49, 1.0)))),
+                                                color: titleColor))),
                                     Row(children: <Widget>[dateText, timeText]),
                                   ]))),
-                      DeleteButton(
-                        onTap: () {
-                          widget.onDeleteEvent(widget.event);
-                        },
-                        isActive: true,
-                      ),
+                      widget.modeIsEdit
+                          ? Icon(Icons.lens_rounded,
+                              size: 15, color: widget.event.user.color)
+                          : DeleteButton(
+                              onTap: () {
+                                widget.onDeleteEvent(widget.event);
+                              },
+                              isActive: true,
+                            ),
                     ]))));
   }
 }
