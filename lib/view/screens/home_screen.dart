@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterAcmFall/service/auth_service.dart';
+import 'package:flutterAcmFall/model/auth_model.dart';
 import 'package:flutterAcmFall/view/screens/event/event_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
       child: Scaffold(
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            await Provider.of<AuthService>(context, listen: false)
+            await Provider.of<AuthModel>(context, listen: false)
                 .signOutGoogle();
           },
           tooltip: 'Logout',

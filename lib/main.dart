@@ -5,15 +5,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutterAcmFall/view/screens/home_screen.dart';
 import 'package:flutterAcmFall/view/screens/login_page.dart';
-import 'package:flutterAcmFall/service/auth_service.dart';
+import 'package:flutterAcmFall/model/auth_model.dart';
 import 'package:flutterAcmFall/view/screens/group/group_enter_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
-    ChangeNotifierProvider<AuthService>(
-      create: (context) => AuthService(),
+    ChangeNotifierProvider<AuthModel>(
+      create: (context) => AuthModel(),
       child: MyApp(),
     ),
   );
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: FutureBuilder<User>(
         // get the Provider, and call the getUser method
-        future: Provider.of<AuthService>(context).checkUser(),
+        future: Provider.of<AuthModel>(context).checkUser(),
         // wait for the future to resolve and render the appropriate
         // widget for HomePage or LoginPage
         builder: (context, AsyncSnapshot<User> snapshot) {

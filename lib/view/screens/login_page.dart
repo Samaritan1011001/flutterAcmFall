@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutterAcmFall/service/auth_service.dart';
+import 'package:flutterAcmFall/model/auth_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     return OutlineButton(
       splashColor: Colors.grey,
       onPressed: () async {
-        User result = await Provider.of<AuthService>(context, listen: false)
+        User result = await Provider.of<AuthModel>(context, listen: false)
             .signInWithGoogle();
         print(result);
       },

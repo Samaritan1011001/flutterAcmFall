@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterAcmFall/service/auth_service.dart';
+import 'package:flutterAcmFall/model/auth_model.dart';
 import 'package:flutterAcmFall/view/screens/home_screen.dart';
 
 class GroupCreateScreen extends StatelessWidget {
@@ -66,7 +66,7 @@ class CreateGroupFormState extends State<CreateGroupForm> {
                     "name": nameController.text,
                   }).then((res) {
                     User currentUser =
-                        Provider.of<AuthService>(context, listen: false)
+                        Provider.of<AuthModel>(context, listen: false)
                             .getUser();
                     firestoreInstance
                         .collection("users")
