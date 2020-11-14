@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterAcmFall/screens/auth_service.dart';
-import 'package:flutterAcmFall/screens/home_screen.dart';
+import 'package:flutterAcmFall/service/auth_service.dart';
+import 'package:flutterAcmFall/view/screens/home_screen.dart';
 
 class GroupCreateScreen extends StatelessWidget {
   @override
@@ -65,11 +65,12 @@ class CreateGroupFormState extends State<CreateGroupForm> {
                   firestoreInstance.collection("groups").add({
                     "name": nameController.text,
                   }).then((res) {
-                    User currentUser = Provider.of<AuthService>(context).getUser();
+                    User currentUser =
+                        Provider.of<AuthService>(context).getUser();
                     firestoreInstance
-                      .collection("users")
-                      .doc(currentUser.uid)
-                      .update({"group": res.id}).then((_) {
+                        .collection("users")
+                        .doc(currentUser.uid)
+                        .update({"group": res.id}).then((_) {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => HomeScreen()),

@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutterAcmFall/screens/home_screen.dart';
-import 'package:flutterAcmFall/screens/login_page.dart';
-import 'package:flutterAcmFall/screens/auth_service.dart';
-import 'package:flutterAcmFall/screens/group/group_enter_screen.dart';
+import 'package:flutterAcmFall/view/screens/home_screen.dart';
+import 'package:flutterAcmFall/view/screens/login_page.dart';
+import 'package:flutterAcmFall/service/auth_service.dart';
+import 'package:flutterAcmFall/view/screens/group/group_enter_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

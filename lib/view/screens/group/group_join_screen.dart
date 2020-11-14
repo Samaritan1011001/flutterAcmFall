@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterAcmFall/screens/auth_service.dart';
-import 'package:flutterAcmFall/screens/home_screen.dart';
+import 'package:flutterAcmFall/service/auth_service.dart';
+import 'package:flutterAcmFall/view/screens/home_screen.dart';
 
 class GroupJoinScreen extends StatelessWidget {
   @override
@@ -62,13 +62,18 @@ class JoinGroupFormState extends State<JoinGroupForm> {
               onPressed: () {
                 // Validate returns true if the form is valid
                 if (_formKey.currentState.validate()) {
-                  firestoreInstance.collection("groups").doc(keyController.text).get().then((res) {
-                    if (res.exists){
-                      User currentUser = Provider.of<AuthService>(context).getUser();
+                  firestoreInstance
+                      .collection("groups")
+                      .doc(keyController.text)
+                      .get()
+                      .then((res) {
+                    if (res.exists) {
+                      User currentUser =
+                          Provider.of<AuthService>(context).getUser();
                       firestoreInstance
-                        .collection("users")
-                        .doc(currentUser.uid)
-                        .update({"group": keyController.text}).then((_) {
+                          .collection("users")
+                          .doc(currentUser.uid)
+                          .update({"group": keyController.text}).then((_) {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(builder: (context) => HomeScreen()),

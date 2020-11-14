@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterAcmFall/screens/group/group_create_screen.dart';
-import 'package:flutterAcmFall/screens/group/group_join_screen.dart';
-import 'package:flutterAcmFall/screens/auth_service.dart';
+import 'package:flutterAcmFall/view/screens/group/group_create_screen.dart';
+import 'package:flutterAcmFall/view/screens/group/group_join_screen.dart';
+import 'package:flutterAcmFall/service/auth_service.dart';
 
 class GroupEnterScreen extends StatelessWidget {
   final Map<String, dynamic> userdata;
@@ -52,9 +52,7 @@ class GroupEnterScreen extends StatelessWidget {
           TextSpan(text: 'Hello '),
           TextSpan(
               text: this.userdata["username"],
-              style: TextStyle(
-                  fontWeight:
-                      FontWeight.bold)),
+              style: TextStyle(fontWeight: FontWeight.bold)),
           TextSpan(text: ', please create a group or join an exist one!'),
         ],
       ),

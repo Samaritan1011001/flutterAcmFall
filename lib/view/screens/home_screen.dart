@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutterAcmFall/screens/auth_service.dart';
+import 'package:flutterAcmFall/service/auth_service.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -33,7 +33,6 @@ class HomeScreen extends StatelessWidget {
             Icon(Icons.directions_transit),
           ],
         ),
-
       ),
     );
   }
