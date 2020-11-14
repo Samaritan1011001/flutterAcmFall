@@ -69,7 +69,8 @@ class JoinGroupFormState extends State<JoinGroupForm> {
                       .then((res) {
                     if (res.exists) {
                       User currentUser =
-                          Provider.of<AuthService>(context).getUser();
+                          Provider.of<AuthService>(context, listen: false)
+                              .getUser();
                       firestoreInstance
                           .collection("users")
                           .doc(currentUser.uid)

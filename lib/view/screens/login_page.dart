@@ -33,8 +33,8 @@ class _LoginPageState extends State<LoginPage> {
     return OutlineButton(
       splashColor: Colors.grey,
       onPressed: () async {
-        User result =
-            await Provider.of<AuthService>(context).signInWithGoogle();
+        User result = await Provider.of<AuthService>(context, listen: false)
+            .signInWithGoogle();
         print(result);
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),

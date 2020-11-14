@@ -66,7 +66,8 @@ class CreateGroupFormState extends State<CreateGroupForm> {
                     "name": nameController.text,
                   }).then((res) {
                     User currentUser =
-                        Provider.of<AuthService>(context).getUser();
+                        Provider.of<AuthService>(context, listen: false)
+                            .getUser();
                     firestoreInstance
                         .collection("users")
                         .doc(currentUser.uid)

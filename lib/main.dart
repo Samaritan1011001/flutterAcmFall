@@ -13,10 +13,8 @@ Future<void> main() async {
   await Firebase.initializeApp();
   runApp(
     ChangeNotifierProvider<AuthService>(
+      create: (context) => AuthService(),
       child: MyApp(),
-      builder: (BuildContext context) {
-        return AuthService();
-      },
     ),
   );
 }
