@@ -5,6 +5,8 @@ import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutterAcmFall/model/objects/User.dart';
 import 'package:flutterAcmFall/model/mock_data.dart';
 
+List<Event> MOCK_DATA = MockData().getDataList();
+
 class EventScreen extends StatefulWidget {
   EventScreen({Key key}) : super(key: key);
 
@@ -12,7 +14,7 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreen extends State<EventScreen> {
-  List<Event> _events = MockData().getDataList();
+  List<Event> _events = MOCK_DATA;
   //List<Event> _events = [];
   User _user = User(id: "1234567", color: Color.fromRGBO(244, 94, 109, 1.0));
   bool _openUserEventScreen = false;
@@ -83,7 +85,7 @@ class _EventScreen extends State<EventScreen> {
                     child: Container(
                         height: 100,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(244, 94, 109, 1.0),
+                            color: _user.color,
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 40),
@@ -97,7 +99,11 @@ class _EventScreen extends State<EventScreen> {
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white)),
                                   userEvents.length > 0
-                                      ? Text("${userEvents.length} events",
+                                      ? Text(
+                                          "${userEvents.length} " +
+                                              (userEvents.length == 1
+                                                  ? "event"
+                                                  : "events"),
                                           style: TextStyle(
                                               fontSize: 18,
                                               color: Color.fromRGBO(
