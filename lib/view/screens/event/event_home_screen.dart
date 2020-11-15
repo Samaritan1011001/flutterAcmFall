@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutterAcmFall/view/screens/event/user_event_screen.dart';
-import 'package:flutterAcmFall/view/screens/event/add_event_screen.dart';
 import 'package:flutterAcmFall/view/screens/event/event_setting_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_list.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
@@ -24,7 +23,6 @@ class _EventHomeScreen extends State<EventHomeScreen> {
 
   bool _openUserEventScreen = false;
   bool _openEditScreen = false;
-  bool _openAddEventScreen = false;
   bool _isEditMode = false;
 
   void _handleOpenUserEventScreen() {
@@ -63,27 +61,6 @@ class _EventHomeScreen extends State<EventHomeScreen> {
     });
   }
 
-  void _handleOpenAddEventScreen() {
-    FocusScope.of(context).requestFocus(new FocusNode());
-
-    setState(() {
-      _openAddEventScreen = true;
-    });
-  }
-
-  void _handleCloseAddEventScreen(Event event) {
-    FocusScope.of(context).requestFocus(new FocusNode());
-
-    if (event != null) {
-      event.user = _user;
-      _events.add(event);
-    }
-
-    setState(() {
-      _openAddEventScreen = false;
-    });
-  }
-
   void _handleDeleteEvent(Event event) {
     setState(() {
       _events.remove(event);
@@ -98,9 +75,6 @@ class _EventHomeScreen extends State<EventHomeScreen> {
         userEventsCount += 1;
       }
     }
-
-    Widget addEventScreen =
-        AddEventScreen(closeScreen: _handleCloseAddEventScreen);
 
     Widget settingEventScreen = EventSettingScreen(
         event: _cardEvent,
@@ -141,13 +115,6 @@ class _EventHomeScreen extends State<EventHomeScreen> {
                             fontSize: 18,
                             fontWeight: FontWeight.bold))))
           ]),
-      floatingActionButton: _isEditMode
-          ? FloatingActionButton(
-              onPressed: _handleOpenAddEventScreen,
-              backgroundColor: Color.fromRGBO(0, 108, 255, 1.0),
-              child: Icon(Icons.add, color: Colors.white),
-            )
-          : Container(),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -201,7 +168,6 @@ class _EventHomeScreen extends State<EventHomeScreen> {
       mainEventScreen,
       userEventScreen,
       settingEventScreen,
-      _openAddEventScreen ? addEventScreen : Container()
     ]);
   }
 }
