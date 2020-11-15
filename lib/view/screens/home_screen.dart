@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterAcmFall/view/screens/event/event_screen.dart';
+import 'package:flutterAcmFall/view/screens/event/event_home_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
           children: [
             Icon(Icons.shopping_basket),
             //Icon(Icons.directions_transit),
-            EventScreen(),
+            EventHomeScreen(),
           ],
         ),
       ),
