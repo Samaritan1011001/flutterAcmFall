@@ -113,7 +113,8 @@ class _UserEventScreen extends State<UserEventScreen> {
           ),
           body: EventList(
               events: userEvents,
-              modeIsEdit: false,
+              user: widget.user,
+              modeIsEdit: true,
               handleClickEvent: _handleClickEvent,
               handleDeleteEvent: _handleDeleteEvent),
           floatingActionButton: FloatingActionButton(
