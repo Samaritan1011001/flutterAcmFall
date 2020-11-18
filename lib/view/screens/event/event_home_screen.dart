@@ -119,7 +119,7 @@ class _EventHomeScreen extends State<EventHomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-                height: MediaQuery.of(context).size.height * 0.6,
+                height: MediaQuery.of(context).size.height - 130 - 112 - 70,
                 child: EventList(
                   events: _events,
                   user: _user,
