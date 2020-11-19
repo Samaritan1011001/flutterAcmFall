@@ -10,14 +10,6 @@ class HomeScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            await Provider.of<AuthModel>(context, listen: false)
-                .signOutGoogle();
-          },
-          tooltip: 'Logout',
-          child: const Icon(Icons.logout),
-        ),
         bottomNavigationBar: Container(
           height: 70,
           color: Colors.teal,

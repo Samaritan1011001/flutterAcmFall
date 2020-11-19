@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutterAcmFall/view/screens/event/user_event_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_list.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutterAcmFall/model/objects/User.dart';
 import 'package:flutterAcmFall/model/mock_data.dart';
+import 'package:flutterAcmFall/model/auth_model.dart';
 
 List<Event> MOCK_DATA = MockData().getDataList();
 
@@ -55,14 +57,25 @@ class _EventScreen extends State<EventScreen> {
     Widget mainEventScreen = Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-          toolbarHeight: 80,
-          backgroundColor: Colors.white,
-          shadowColor: Colors.transparent,
-          title: Text("Share Events",
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30))),
+        toolbarHeight: 80,
+        backgroundColor: Colors.white,
+        shadowColor: Colors.transparent,
+        title: Text("Share Events",
+            style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 30)),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.black),
+            tooltip: 'Logout',
+            onPressed: () async {
+            await Provider.of<AuthModel>(context, listen: false)
+                .signOutGoogle();
+            },
+          )
+        ],
+      ),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
