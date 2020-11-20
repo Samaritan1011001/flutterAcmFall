@@ -4,7 +4,8 @@ import 'package:flutterAcmFall/view/screens/event/event_setting_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_list.dart';
 import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
-import 'package:flutterAcmFall/model/objects/User.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserEventScreen extends StatefulWidget {
   UserEventScreen(
@@ -12,7 +13,7 @@ class UserEventScreen extends StatefulWidget {
       : super(key: key);
 
   final List<Event> events;
-  final User user;
+  final AppUser user;
   final bool isOpen;
   final Function closeUserEventScreen;
 
@@ -20,6 +21,7 @@ class UserEventScreen extends StatefulWidget {
 }
 
 class _UserEventScreen extends State<UserEventScreen> {
+  final firestoreInstance = FirebaseFirestore.instance;
   bool _openAddEventScreen = false;
   bool _openSettingScreen = false;
   Event _cardEvent =
@@ -37,6 +39,24 @@ class _UserEventScreen extends State<UserEventScreen> {
     if (event != null) {
       event.user = widget.user;
       widget.events.add(event);
+
+      firestoreInstance.collection("events").add({
+        "title": event.title,
+        "date": event.date,
+        "time": event.time,
+        "isDone": event.isDone,
+        "user": event.user.id,
+        "group": widget.user.group,
+      }).then((res) {
+        firestoreInstance
+            .collection("users")
+            .doc(widget.user.id)
+            .update({"events": res.id});
+        firestoreInstance
+            .collection("group")
+            .doc(widget.user.group)
+            .update({"share_events.${res.id}": DateTime.now()});
+      });
     }
 
     setState(() {
@@ -113,7 +133,8 @@ class _UserEventScreen extends State<UserEventScreen> {
           ),
           body: EventList(
               events: userEvents,
-              modeIsEdit: false,
+              user: widget.user,
+              modeIsEdit: true,
               handleClickEvent: _handleClickEvent,
               handleDeleteEvent: _handleDeleteEvent),
           floatingActionButton: FloatingActionButton(

@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
 
 class EventCard extends StatefulWidget {
   EventCard(
       {Key key,
       this.event,
+      this.user,
       this.modeIsEdit,
       this.onClickEvent,
       this.onDeleteEvent})
       : super(key: key);
 
   final Event event;
+  final AppUser user;
   final bool modeIsEdit;
   final Function onClickEvent;
   final Function onDeleteEvent;
@@ -81,15 +84,16 @@ class _EventCard extends State<EventCard> {
                                                 color: titleColor))),
                                     Row(children: <Widget>[dateText, timeText]),
                                   ]))),
-                      widget.modeIsEdit
-                          ? Icon(Icons.lens_rounded,
-                              size: 15, color: widget.event.user.color)
-                          : DeleteButton(
+                      widget.modeIsEdit &&
+                              widget.user.id == widget.event.user.id
+                          ? DeleteButton(
                               onTap: () {
                                 widget.onDeleteEvent(widget.event);
                               },
                               isActive: true,
-                            ),
+                            )
+                          : Icon(Icons.lens_rounded,
+                              size: 15, color: widget.event.user.color)
                     ]))));
   }
 }

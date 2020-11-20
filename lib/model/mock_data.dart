@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutterAcmFall/model/objects/Event.dart';
-import 'package:flutterAcmFall/model/objects/User.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
 
 class MockData {
   DateTime createRandomDate(Random gen, int range) {
@@ -32,11 +32,11 @@ class MockData {
       "Go to sleep"
     ];
 
-    List<User> users = [
-      User(id: "12345", color: Color.fromRGBO(97, 222, 164, 1.0)),
-      User(id: "1234", color: Color.fromRGBO(0, 108, 255, 1.0)),
-      User(id: "123", color: Color.fromRGBO(182, 120, 255, 1.0)),
-      User(id: "12", color: Color.fromRGBO(255, 231, 97, 1.0)),
+    List<AppUser> users = [
+      AppUser(id: "12345", color: Color.fromRGBO(97, 222, 164, 1.0)),
+      AppUser(id: "1234", color: Color.fromRGBO(0, 108, 255, 1.0)),
+      AppUser(id: "123", color: Color.fromRGBO(182, 120, 255, 1.0)),
+      AppUser(id: "12", color: Color.fromRGBO(255, 231, 97, 1.0)),
     ];
 
     List<Event> events = [];

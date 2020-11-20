@@ -1,25 +1,47 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterAcmFall/view/screens/event/user_event_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_list.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
-import 'package:flutterAcmFall/model/objects/User.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
 import 'package:flutterAcmFall/model/mock_data.dart';
 import 'package:flutterAcmFall/model/auth_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 List<Event> MOCK_DATA = MockData().getDataList();
 
-class EventScreen extends StatefulWidget {
-  EventScreen({Key key}) : super(key: key);
+class EventHomeScreen extends StatefulWidget {
+  EventHomeScreen({Key key}) : super(key: key);
 
-  _EventScreen createState() => _EventScreen();
+  _EventHomeScreen createState() => _EventHomeScreen();
 }
 
-class _EventScreen extends State<EventScreen> {
+class _EventHomeScreen extends State<EventHomeScreen> {
+  final firestoreInstance = FirebaseFirestore.instance;
+
   List<Event> _events = MOCK_DATA;
-  //List<Event> _events = [];
-  User _user = User(id: "1234567", color: Color.fromRGBO(244, 94, 109, 1.0));
+  AppUser _user = new AppUser();
+
   bool _openUserEventScreen = false;
+  bool _isEditMode = false;
+
+  void initState() {
+    User currentUser = Provider.of<AuthModel>(context, listen: false).getUser();
+    setState(() {
+      _user.id = currentUser.uid;
+      _user.group = firestoreInstance
+          .collection("users")
+          .doc(currentUser.uid)
+          .get()
+          .then((value) {
+        return value.data()["group"];
+      }).toString();
+      _user.color = Color.fromRGBO(244, 94, 109, 1.0);
+    });
+  }
 
   void _handleOpenUserEventScreen() {
     setState(() {
@@ -33,18 +55,18 @@ class _EventScreen extends State<EventScreen> {
     });
   }
 
-  void _handleDeleteEvent(Event event) {
+  void _handleToggleEdit() {
     setState(() {
-      _events.remove(event);
+      _isEditMode = !_isEditMode;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Event> userEvents = [];
+    int userEventsCount = 0;
     for (int i = 0; i < _events.length; i++) {
       if (_events[i].user.id == _user.id) {
-        userEvents.add(_events[i]);
+        userEventsCount += 1;
       }
     }
 
@@ -54,51 +76,55 @@ class _EventScreen extends State<EventScreen> {
       isOpen: _openUserEventScreen,
       closeUserEventScreen: _handleCloseUserEventScreen,
     );
+
     Widget mainEventScreen = Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        toolbarHeight: 80,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.transparent,
-        title: Text("Share Events",
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 30)),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.black),
-            tooltip: 'Logout',
-            onPressed: () async {
-            await Provider.of<AuthModel>(context, listen: false)
-                .signOutGoogle();
-            },
-          )
-        ],
-      ),
+          toolbarHeight: 80,
+          backgroundColor: Colors.white,
+          shadowColor: Colors.transparent,
+          title: Text("Group Events",
+              style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 30)),
+          actions: <Widget>[
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0),
+                child: InkWell(
+                    onTap: _handleToggleEdit,
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    child: Text(_isEditMode ? "Cancel" : "Edit",
+                        style: TextStyle(
+                            color: _isEditMode
+                                ? Color.fromRGBO(244, 94, 109, 1.0)
+                                : Color.fromRGBO(0, 108, 255, 1.0),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold))))
+          ]),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-                height: MediaQuery.of(context).size.height * 0.6,
+                height: MediaQuery.of(context).size.height - 130 - 112 - 70,
                 child: EventList(
                   events: _events,
-                  modeIsEdit: true,
-                  handleClickEvent: (Event event) {
-                    print(event);
-                  },
-                  handleDeleteEvent: _handleDeleteEvent,
+                  user: _user,
+                  modeIsEdit: _isEditMode,
+                  handleClickEvent: () {},
+                  handleDeleteEvent: () {},
                 )),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 child: InkWell(
-                    onTap: _handleOpenUserEventScreen,
+                    onTap: _isEditMode ? () {} : _handleOpenUserEventScreen,
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     child: Container(
                         height: 100,
                         decoration: BoxDecoration(
-                            color: _user.color,
+                            color: Color.fromRGBO(244, 94, 109, 1.0),
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 40),
@@ -111,10 +137,10 @@ class _EventScreen extends State<EventScreen> {
                                           fontSize: 25,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white)),
-                                  userEvents.length > 0
+                                  userEventsCount > 0
                                       ? Text(
-                                          "${userEvents.length} " +
-                                              (userEvents.length == 1
+                                          "$userEventsCount " +
+                                              (userEventsCount == 1
                                                   ? "event"
                                                   : "events"),
                                           style: TextStyle(
@@ -126,6 +152,9 @@ class _EventScreen extends State<EventScreen> {
           ]),
     );
 
-    return Stack(children: <Widget>[mainEventScreen, userEventScreen]);
+    return Stack(children: <Widget>[
+      mainEventScreen,
+      userEventScreen,
+    ]);
   }
 }

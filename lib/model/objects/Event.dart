@@ -1,11 +1,11 @@
-import 'package:flutterAcmFall/model/objects/User.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
 
 class Event {
   String title;
   DateTime date;
   DateTime time;
   bool isDone;
-  User user;
+  AppUser user;
 
   Event({this.title, this.date, this.time, this.isDone, this.user});
 
