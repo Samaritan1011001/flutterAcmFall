@@ -42,11 +42,11 @@ class _UserEventScreen extends State<UserEventScreen> {
 
       firestoreInstance.collection("events").add({
         "title": event.title,
+        "group": widget.user.group,
         "date": event.date,
         "time": event.time,
         "isDone": event.isDone,
         "user": event.user.id,
-        "group": widget.user.group,
       }).then((res) {
         firestoreInstance
             .collection("users")
