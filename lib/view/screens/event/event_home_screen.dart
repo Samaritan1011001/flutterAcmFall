@@ -89,6 +89,14 @@ class _EventHomeScreen extends State<EventHomeScreen> {
           toolbarHeight: 80,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
+          leading: IconButton( 
+            icon: const Icon(Icons.logout, color: Colors.black), 
+            tooltip: 'Logout', 
+            onPressed: () async { 
+            await Provider.of<AuthModel>(context, listen: false) 
+                .signOutGoogle(); 
+            }, 
+          ),
           title: Text("Group Events",
               style: TextStyle(
                   color: Colors.black,
