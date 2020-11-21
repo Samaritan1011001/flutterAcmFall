@@ -40,24 +40,22 @@ class _UserEventScreen extends State<UserEventScreen> {
       event.user = widget.user;
       widget.events.add(event);
 
-      DateTime timeCreated = DateTime.now();
-
       firestoreInstance.collection("events").add({
         "title": event.title,
-        "group": widget.user.group,
         "date": event.date,
         "time": event.time,
         "isDone": event.isDone,
         "user": event.user.id,
+        "group": widget.user.group,
       }).then((res) {
         firestoreInstance
             .collection("users")
             .doc(widget.user.id)
-            .update({"events.${res.id}": timeCreated});
+            .update({"events": res.id});
         firestoreInstance
             .collection("group")
             .doc(widget.user.group)
-            .update({"share_events.${res.id}": timeCreated});
+            .update({"share_events.${res.id}": DateTime.now()});
       });
     }
 
