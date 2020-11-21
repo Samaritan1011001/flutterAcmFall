@@ -21,7 +21,7 @@ class _EventHomeScreen extends State<EventHomeScreen> {
   final firestoreInstance = FirebaseFirestore.instance;
 
   List<Event> _events = MOCK_DATA;
-  AppUser _user = new AppUser();
+  AppUser _user = AppUser(id:null, group: null, color: null);
 
   bool _openUserEventScreen = false;
   bool _isEditMode = false;
