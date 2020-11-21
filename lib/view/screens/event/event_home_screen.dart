@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterAcmFall/view/screens/event/user_event_screen.dart';
@@ -28,17 +26,19 @@ class _EventHomeScreen extends State<EventHomeScreen> {
   bool _openUserEventScreen = false;
   bool _isEditMode = false;
 
+  @override
   void initState() {
+    super.initState();
     User currentUser = Provider.of<AuthModel>(context, listen: false).getUser();
     setState(() {
       _user.id = currentUser.uid;
-      _user.group = firestoreInstance
+      firestoreInstance
           .collection("users")
           .doc(currentUser.uid)
           .get()
           .then((value) {
-        return value.data()["group"];
-      }).toString();
+        _user.group = value.data()["group"];
+      });
       _user.color = Color.fromRGBO(244, 94, 109, 1.0);
     });
   }

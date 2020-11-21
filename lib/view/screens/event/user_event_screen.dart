@@ -40,6 +40,8 @@ class _UserEventScreen extends State<UserEventScreen> {
       event.user = widget.user;
       widget.events.add(event);
 
+      DateTime timeCreated = DateTime.now();
+
       firestoreInstance.collection("events").add({
         "title": event.title,
         "date": event.date,
@@ -48,14 +50,17 @@ class _UserEventScreen extends State<UserEventScreen> {
         "user": event.user.id,
         "group": widget.user.group,
       }).then((res) {
+        setState(() {
+          event.id = res.id;
+        });
         firestoreInstance
             .collection("users")
             .doc(widget.user.id)
-            .update({"events": res.id});
+            .update({"events.${res.id}": timeCreated});
         firestoreInstance
             .collection("group")
             .doc(widget.user.group)
-            .update({"share_events.${res.id}": DateTime.now()});
+            .update({"share_events.${res.id}": timeCreated});
       });
     }
 
@@ -64,8 +69,17 @@ class _UserEventScreen extends State<UserEventScreen> {
     });
   }
 
-  void _handleCloseSettingScreen() {
+  void _handleCloseSettingScreen(Event event) {
     FocusScope.of(context).requestFocus(new FocusNode());
+
+    firestoreInstance.collection("events").doc(event.id).set({
+      "title": event.title,
+      "date": event.date,
+      "time": event.time,
+      "isDone": event.isDone,
+      "user": event.user.id,
+      "group": event.user.group,
+    });
 
     setState(() {
       _openSettingScreen = false;

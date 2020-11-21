@@ -112,7 +112,7 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                       child: TextExitButton(
                           text: "Done",
                           fontWeight: FontWeight.bold,
-                          onTap: widget.closeSetting,
+                          onTap: widget.closeSetting(widget.event),
                           isActive: true))
                 ]),
             body: GestureDetector(
