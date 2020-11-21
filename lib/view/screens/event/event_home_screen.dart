@@ -21,7 +21,7 @@ class _EventHomeScreen extends State<EventHomeScreen> {
   final firestoreInstance = FirebaseFirestore.instance;
 
   List<Event> _events = MOCK_DATA;
-  AppUser _user = AppUser(id:null, group: null, color: null);
+  AppUser _user = AppUser(id: null, group: null, color: null);
 
   bool _openUserEventScreen = false;
   bool _isEditMode = false;
@@ -58,6 +58,12 @@ class _EventHomeScreen extends State<EventHomeScreen> {
   void _handleToggleEdit() {
     setState(() {
       _isEditMode = !_isEditMode;
+    });
+  }
+
+  void _handleDeleteEvent(Event event) {
+    setState(() {
+      _events.remove(event);
     });
   }
 
@@ -112,8 +118,8 @@ class _EventHomeScreen extends State<EventHomeScreen> {
                   events: _events,
                   user: _user,
                   modeIsEdit: _isEditMode,
-                  handleClickEvent: () {},
-                  handleDeleteEvent: () {},
+                  handleClickEvent: (Event event) {},
+                  handleDeleteEvent: _handleDeleteEvent,
                 )),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),

@@ -17,8 +17,8 @@ class AddEventScreen extends StatefulWidget {
 }
 
 class _AddEventScreen extends State<AddEventScreen> {
-  Event _event =
-      Event(title: null, date: null, time: null, isDone: false, user: null);
+  Event _event = Event(
+      id: null, title: null, date: null, time: null, isDone: false, user: null);
 
   TextEditingController _controller = TextEditingController();
 
@@ -40,10 +40,10 @@ class _AddEventScreen extends State<AddEventScreen> {
     });
   }
 
-  void _toggleMoreSetting() {
+  void _handleCloseSettingScreen() {
     FocusScope.of(context).requestFocus(new FocusNode());
     setState(() {
-      _openMoreSetting = !_openMoreSetting;
+      _openMoreSetting = false;
       _controller.text = _event.title;
     });
   }
@@ -160,7 +160,13 @@ class _AddEventScreen extends State<AddEventScreen> {
                         color: Color.fromRGBO(37, 42, 49, 1.0)),
                   )),
                   InkWell(
-                      onTap: _toggleMoreSetting,
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(new FocusNode());
+                        setState(() {
+                          _openMoreSetting = true;
+                          _controller.text = _event.title;
+                        });
+                      },
                       highlightColor: Colors.transparent,
                       splashColor: Colors.transparent,
                       child: Icon(Icons.info_outline,
@@ -175,8 +181,9 @@ class _AddEventScreen extends State<AddEventScreen> {
       EventSettingScreen(
         event: _event,
         controller: _controller,
+        isEditExistedEvent: false,
         isOpen: _openMoreSetting,
-        closeSetting: _toggleMoreSetting,
+        closeSetting: _handleCloseSettingScreen,
       ),
     ]);
   }

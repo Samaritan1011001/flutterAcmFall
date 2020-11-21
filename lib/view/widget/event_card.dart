@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutterAcmFall/model/objects/AppUser.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventCard extends StatefulWidget {
   EventCard(
@@ -23,6 +24,8 @@ class EventCard extends StatefulWidget {
 }
 
 class _EventCard extends State<EventCard> {
+  final firestoreInstance = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     String title = (widget.event.title.length >= 25)
@@ -64,6 +67,10 @@ class _EventCard extends State<EventCard> {
                         onTap: () {
                           setState(() {
                             widget.event.isDone = !widget.event.isDone;
+                            firestoreInstance
+                                .collection("events")
+                                .doc(widget.event.id)
+                                .update({"isDone": widget.event.isDone});
                           });
                         },
                         isActive: widget.event.isDone,
@@ -89,6 +96,24 @@ class _EventCard extends State<EventCard> {
                           ? DeleteButton(
                               onTap: () {
                                 widget.onDeleteEvent(widget.event);
+                                firestoreInstance
+                                    .collection("events")
+                                    .doc(widget.event.id)
+                                    .delete();
+                                firestoreInstance
+                                    .collection("groups")
+                                    .doc(widget.event.user.group)
+                                    .update({
+                                  "share_events.${widget.event.id}":
+                                      FieldValue.delete()
+                                });
+                                firestoreInstance
+                                    .collection("users")
+                                    .doc(widget.event.user.id)
+                                    .update({
+                                  "events.${widget.event.id}":
+                                      FieldValue.delete()
+                                });
                               },
                               isActive: true,
                             )

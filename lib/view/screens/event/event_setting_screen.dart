@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventSettingScreen extends StatefulWidget {
   EventSettingScreen(
-      {Key key, this.event, this.controller, this.isOpen, this.closeSetting})
+      {Key key,
+      this.event,
+      this.controller,
+      this.isEditExistedEvent,
+      this.isOpen,
+      this.closeSetting})
       : super(key: key);
 
   final Event event;
   final TextEditingController controller;
+  final bool isEditExistedEvent;
   final bool isOpen;
   final Function closeSetting;
 
@@ -17,6 +24,8 @@ class EventSettingScreen extends StatefulWidget {
 }
 
 class _EventSettingScreen extends State<EventSettingScreen> {
+  final firestoreInstance = FirebaseFirestore.instance;
+
   void _toggleDate() {
     FocusScope.of(context).requestFocus(new FocusNode());
     setState(() {
@@ -112,7 +121,22 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                       child: TextExitButton(
                           text: "Done",
                           fontWeight: FontWeight.bold,
-                          onTap: widget.closeSetting(widget.event),
+                          onTap: () {
+                            if (widget.isEditExistedEvent) {
+                              firestoreInstance
+                                  .collection("events")
+                                  .doc(widget.event.id)
+                                  .update({
+                                "title": widget.event.title,
+                                "date": widget.event.date,
+                                "time": widget.event.time,
+                                "isDone": widget.event.isDone,
+                                "user": widget.event.user.id,
+                                "group": widget.event.user.group,
+                              });
+                            }
+                            widget.closeSetting();
+                          },
                           isActive: true))
                 ]),
             body: GestureDetector(

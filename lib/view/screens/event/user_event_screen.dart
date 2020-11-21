@@ -22,10 +22,11 @@ class UserEventScreen extends StatefulWidget {
 
 class _UserEventScreen extends State<UserEventScreen> {
   final firestoreInstance = FirebaseFirestore.instance;
+
   bool _openAddEventScreen = false;
   bool _openSettingScreen = false;
-  Event _cardEvent =
-      Event(title: null, date: null, time: null, isDone: false, user: null);
+  Event _cardEvent = Event(
+      id: null, title: null, date: null, time: null, isDone: false, user: null);
 
   void _handleOpenAddEventScreen() {
     setState(() {
@@ -33,34 +34,33 @@ class _UserEventScreen extends State<UserEventScreen> {
     });
   }
 
-  void _handleCloseAddEventScreen(Event event) {
+  void _handleCloseAddEventScreen(Event event) async {
     FocusScope.of(context).requestFocus(new FocusNode());
 
     if (event != null) {
-      event.user = widget.user;
-      widget.events.add(event);
-
       DateTime timeCreated = DateTime.now();
 
-      firestoreInstance.collection("events").add({
+      await firestoreInstance.collection("events").add({
         "title": event.title,
         "date": event.date,
         "time": event.time,
         "isDone": event.isDone,
-        "user": event.user.id,
+        "user": widget.user.id,
         "group": widget.user.group,
       }).then((res) {
-        setState(() {
-          event.id = res.id;
-        });
         firestoreInstance
             .collection("users")
             .doc(widget.user.id)
             .update({"events.${res.id}": timeCreated});
         firestoreInstance
-            .collection("group")
+            .collection("groups")
             .doc(widget.user.group)
             .update({"share_events.${res.id}": timeCreated});
+        setState(() {
+          event.id = res.id;
+          event.user = widget.user;
+          widget.events.add(event);
+        });
       });
     }
 
@@ -69,17 +69,8 @@ class _UserEventScreen extends State<UserEventScreen> {
     });
   }
 
-  void _handleCloseSettingScreen(Event event) {
+  void _handleCloseSettingScreen() {
     FocusScope.of(context).requestFocus(new FocusNode());
-
-    firestoreInstance.collection("events").doc(event.id).set({
-      "title": event.title,
-      "date": event.date,
-      "time": event.time,
-      "isDone": event.isDone,
-      "user": event.user.id,
-      "group": event.user.group,
-    });
 
     setState(() {
       _openSettingScreen = false;
@@ -113,6 +104,7 @@ class _UserEventScreen extends State<UserEventScreen> {
     Widget settingEventScreen = EventSettingScreen(
         event: _cardEvent,
         controller: TextEditingController(text: _cardEvent.title),
+        isEditExistedEvent: true,
         isOpen: _openSettingScreen,
         closeSetting: _handleCloseSettingScreen);
 
