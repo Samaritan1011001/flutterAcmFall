@@ -41,16 +41,15 @@ class _EventList extends State<EventList> {
 
       return dateTimeA.compareTo(dateTimeB);
     });
-    return SingleChildScrollView(
-      child: Column(
-          children: widget.events
-              .map((event) => EventCard(
-                  event: event,
-                  user: widget.user,
-                  modeIsEdit: widget.modeIsEdit,
-                  onClickEvent: widget.handleClickEvent,
-                  onDeleteEvent: widget.handleDeleteEvent))
-              .toList()),
-    );
+    return ListView.builder(
+        itemCount: widget.events.length,
+        itemBuilder: (context, index) {
+          return EventCard(
+              event: widget.events[index],
+              user: widget.user,
+              modeIsEdit: widget.modeIsEdit,
+              onClickEvent: widget.handleClickEvent,
+              onDeleteEvent: widget.handleDeleteEvent);
+        });
   }
 }
