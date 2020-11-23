@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutterAcmFall/model/auth_model.dart';
+import 'package:flutterAcmFall/view/screens/event/event_home_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -20,10 +24,10 @@ class HomeScreen extends StatelessWidget {
         body: TabBarView(
           children: [
             Icon(Icons.shopping_basket),
-            Icon(Icons.directions_transit),
+            //Icon(Icons.directions_transit),
+            EventHomeScreen(),
           ],
         ),
-
       ),
     );
   }
