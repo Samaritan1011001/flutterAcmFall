@@ -23,8 +23,7 @@ class HomeScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            Icon(Icons.shopping_basket),
-            //Icon(Icons.directions_transit),
+            ChecklistScreen(),
             EventHomeScreen(),
           ],
         ),

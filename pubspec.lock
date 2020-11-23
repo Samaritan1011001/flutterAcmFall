@@ -53,7 +53,7 @@ packages:
   charcode:
     dependency: transitive
     description:
-      name: charcode
+      name: characters
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0-nullsafety.1"
@@ -95,21 +95,21 @@ packages:
   collection:
     dependency: transitive
     description:
-      name: collection
+      name: charcode
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0-nullsafety.3"
   convert:
     dependency: transitive
     description:
-      name: convert
+      name: clock
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
-  crypto:
+    version: "1.1.0-nullsafety.1"
+  collection:
     dependency: transitive
     description:
-      name: crypto
+      name: collection
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
@@ -195,6 +195,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_datetime_picker:
+    dependency: "direct main"
+    description:
+      name: flutter_datetime_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.4.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
