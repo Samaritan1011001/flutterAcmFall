@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterAcmFall/screens/grocChecklistScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
         ),
         body: TabBarView(
           children: [
-            Icon(Icons.shopping_basket),
+            ChecklistScreen(),
             Icon(Icons.directions_transit),
           ],
         ),
@@ -29,19 +30,4 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class Nav extends StatelessWidget{
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        child: Icon(Icons.add),
-        foregroundColor: Color.fromRGBO(0,108,255,1),
-        backgroundColor: Colors.white
 
-      ),
-    );
-
-  }
-
-}
