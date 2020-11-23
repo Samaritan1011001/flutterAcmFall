@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterAcmFall/screens/grocChecklistScreen.dart';
+import 'package:flutterAcmFall/view/screens/grocery/grocChecklistScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
