@@ -17,7 +17,8 @@ class AuthModel with ChangeNotifier {
   }
 
   Future<User> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await _googleSignIn.signIn();
+    final GoogleSignInAccount googleSignInAccount =
+        await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
 
@@ -40,6 +41,7 @@ class AuthModel with ChangeNotifier {
         "username": user.displayName,
         "email:": user.email,
       }, SetOptions(merge: true)).then((_) {
+        print(user.photoURL);
         print("Create user in firestore success!");
       });
 

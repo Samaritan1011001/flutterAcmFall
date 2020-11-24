@@ -117,7 +117,7 @@ class _EventCard extends State<EventCard> {
                               },
                               isActive: true,
                             )
-                          : Container(),
+                          : Container()
                     ]))));
   }
 }

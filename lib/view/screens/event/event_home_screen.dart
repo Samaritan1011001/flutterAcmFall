@@ -1,15 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterAcmFall/view/screens/event/user_event_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_list.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutterAcmFall/model/objects/AppUser.dart';
-//import 'package:flutterAcmFall/model/mock_data.dart';
 import 'package:flutterAcmFall/model/auth_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-//List<Event> MOCK_DATA = MockData().getDataList();
 
 class EventHomeScreen extends StatefulWidget {
   EventHomeScreen({Key key}) : super(key: key);
@@ -19,6 +18,7 @@ class EventHomeScreen extends StatefulWidget {
 
 class _EventHomeScreen extends State<EventHomeScreen> {
   final firestoreInstance = FirebaseFirestore.instance;
+  StreamSubscription<QuerySnapshot> _listener;
 
   List<Event> _events = [];
   AppUser _user = AppUser(id: null, group: null);
@@ -35,46 +35,50 @@ class _EventHomeScreen extends State<EventHomeScreen> {
         .doc(currentUser.uid)
         .get()
         .then((userValue) {
-      setState(() {
-        _user.id = currentUser.uid;
-        _user.group = userValue.data()["group"];
-      });
-      firestoreInstance.collection("groups").snapshots().listen((result) {
+      _user.id = currentUser.uid;
+      _user.group = userValue.data()["group"];
+      _listener =
+          firestoreInstance.collection("groups").snapshots().listen((result) {
         result.docChanges.forEach((res) {
-          setState(() {
-            if (res.doc.id == userValue.data()["group"]) {
-              _events = [];
-              for (var id in res.doc.data()["share_events"].keys) {
-                firestoreInstance
-                    .collection("events")
-                    .doc(id)
-                    .get()
-                    .then((eventValue) {
-                  Map eventData = eventValue.data();
-                  AppUser user =
-                      AppUser(id: eventData["user"], group: eventData["group"]);
-                  Event event = Event(
-                    id: id,
-                    title: eventData["title"],
-                    date: eventData["date"].toDate(),
-                    time: eventData["time"].toDate(),
-                    isDone: eventData["isDone"],
-                    user: user,
-                  );
-                  setState(() {
-                    _events.add(event);
-                  });
+          if (res.doc.id == _user.group) {
+            _events = [];
+            for (var id in res.doc.data()["share_events"].keys) {
+              firestoreInstance
+                  .collection("events")
+                  .doc(id)
+                  .get()
+                  .then((eventValue) {
+                Map eventData = eventValue.data();
+                AppUser user =
+                    AppUser(id: eventData["user"], group: eventData["group"]);
+                Event event = Event(
+                  id: id,
+                  title: eventData["title"],
+                  date: eventData["date"].toDate(),
+                  time: eventData["time"].toDate(),
+                  isDone: eventData["isDone"],
+                  user: user,
+                );
+                setState(() {
+                  _events.add(event);
                 });
-              }
+              });
             }
-          });
+          }
         });
       });
     });
   }
 
+  @override
+  void dispose() {
+    _listener.cancel();
+    super.dispose();
+  }
+
   void _handleOpenUserEventScreen() {
     setState(() {
+      _isEditMode = false;
       _openUserEventScreen = true;
     });
   }
@@ -120,6 +124,8 @@ class _EventHomeScreen extends State<EventHomeScreen> {
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
           leading: IconButton(
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
             icon: const Icon(Icons.logout, color: Colors.black),
             tooltip: 'Logout',
             onPressed: () async {
@@ -162,7 +168,7 @@ class _EventHomeScreen extends State<EventHomeScreen> {
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
                 child: InkWell(
-                    onTap: _isEditMode ? () {} : _handleOpenUserEventScreen,
+                    onTap: _handleOpenUserEventScreen,
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     child: Container(
