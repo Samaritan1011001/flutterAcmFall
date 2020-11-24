@@ -117,8 +117,7 @@ class _EventCard extends State<EventCard> {
                               },
                               isActive: true,
                             )
-                          : Icon(Icons.lens_rounded,
-                              size: 15, color: widget.event.user.color)
+                          : Container(),
                     ]))));
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutterAcmFall/model/objects/AppUser.dart';
@@ -33,10 +32,10 @@ class MockData {
     ];
 
     List<AppUser> users = [
-      AppUser(id: "12345", color: Color.fromRGBO(97, 222, 164, 1.0)),
-      AppUser(id: "1234", color: Color.fromRGBO(0, 108, 255, 1.0)),
-      AppUser(id: "123", color: Color.fromRGBO(182, 120, 255, 1.0)),
-      AppUser(id: "12", color: Color.fromRGBO(255, 231, 97, 1.0)),
+      AppUser(id: "12345"),
+      AppUser(id: "1234"),
+      AppUser(id: "123"),
+      AppUser(id: "12"),
     ];
 
     List<Event> events = [];
