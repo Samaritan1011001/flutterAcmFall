@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterAcmFall/model/objects/User.dart';
 import 'package:flutterAcmFall/view/screens/grocery/checklistCreationScreen.dart';
+import 'package:flutterAcmFall/view/widget/logout_button.dart';
 import 'package:intl/intl.dart';
 
 class ChecklistScreen extends StatefulWidget {
@@ -95,6 +96,7 @@ class _ChecklistScreen extends State<ChecklistScreen> {
             toolbarHeight: 80,
             backgroundColor: Colors.white,
             shadowColor: Colors.transparent,
+            leading: LogoutButton(),
             title: Text("Group Grocery List",
                 style: TextStyle(
                     color: Colors.black,
