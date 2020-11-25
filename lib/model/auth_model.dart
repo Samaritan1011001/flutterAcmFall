@@ -40,8 +40,8 @@ class AuthModel with ChangeNotifier {
       FirebaseFirestore.instance.collection("users").doc(user.uid).set({
         "username": user.displayName,
         "email:": user.email,
+        "photoUrl": user.photoURL,
       }, SetOptions(merge: true)).then((_) {
-        print(user.photoURL);
         print("Create user in firestore success!");
       });
 

@@ -49,8 +49,10 @@ class _EventHomeScreen extends State<EventHomeScreen> {
                   .get()
                   .then((eventValue) {
                 Map eventData = eventValue.data();
-                AppUser user =
-                    AppUser(id: eventData["user"], group: eventData["group"]);
+                AppUser user = AppUser(
+                  id: eventData["user"],
+                  group: eventData["group"],
+                );
                 Event event = Event(
                   id: id,
                   title: eventData["title"],
