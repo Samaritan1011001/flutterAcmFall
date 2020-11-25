@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterAcmFall/model/auth_model.dart';
-import 'package:flutterAcmFall/view/screens/home_screen.dart';
+import 'package:flutterAcmFall/main.dart';
 
 class GroupJoinScreen extends StatelessWidget {
   @override
@@ -77,7 +77,7 @@ class JoinGroupFormState extends State<JoinGroupForm> {
                           .update({"group": keyController.text}).then((_) {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                          MaterialPageRoute(builder: (context) => MyApp()),
                         );
                       });
                     } else {
