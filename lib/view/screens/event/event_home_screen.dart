@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterAcmFall/view/screens/event/user_event_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_list.dart';
+import 'package:flutterAcmFall/view/widget/logout_button.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutterAcmFall/model/objects/AppUser.dart';
 import 'package:flutterAcmFall/model/auth_model.dart';
@@ -125,16 +126,7 @@ class _EventHomeScreen extends State<EventHomeScreen> {
           toolbarHeight: 80,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          leading: IconButton(
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            icon: const Icon(Icons.logout, color: Colors.black),
-            tooltip: 'Logout',
-            onPressed: () async {
-              await Provider.of<AuthModel>(context, listen: false)
-                  .signOutGoogle();
-            },
-          ),
+          leading: LogoutButton(),
           title: Text("Group Events",
               style: TextStyle(
                   color: Colors.black,
