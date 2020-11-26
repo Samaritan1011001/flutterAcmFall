@@ -84,7 +84,8 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                                 color: Color.fromRGBO(37, 42, 49, 1.0),
                                 fontSize: 18)),
                         ToggleButton(
-                            onTap: _toggleTime,
+                            onTap:
+                                widget.isEditExistedEvent ? () {} : _toggleTime,
                             isActive: widget.event.time != null),
                       ])),
             ))
@@ -184,7 +185,9 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                                               Color.fromRGBO(37, 42, 49, 1.0),
                                           fontSize: 18)),
                                   ToggleButton(
-                                      onTap: _toggleDate,
+                                      onTap: widget.isEditExistedEvent
+                                          ? () {}
+                                          : _toggleDate,
                                       isActive: widget.event.date != null),
                                 ])),
                       )),
