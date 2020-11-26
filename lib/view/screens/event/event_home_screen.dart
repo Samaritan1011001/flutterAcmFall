@@ -26,9 +26,6 @@ class _EventHomeScreen extends State<EventHomeScreen> {
 
   bool _openUserEventScreen = false;
 
-  // TODO: add isActive field in the events document
-  // if isActive is false, the item is removed, if the item is true, the item
-  // is added or modified -> check for the item in the list
   @override
   void initState() {
     super.initState();
