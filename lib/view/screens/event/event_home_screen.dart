@@ -25,8 +25,10 @@ class _EventHomeScreen extends State<EventHomeScreen> {
   AppUser _user = AppUser(id: null, group: null);
 
   bool _openUserEventScreen = false;
-  bool _isEditMode = false;
 
+  // TODO: add isActive field in the events document
+  // if isActive is false, the item is removed, if the item is true, the item
+  // is added or modified -> check for the item in the list
   @override
   void initState() {
     super.initState();
@@ -38,33 +40,45 @@ class _EventHomeScreen extends State<EventHomeScreen> {
         .then((userValue) {
       _user.id = currentUser.uid;
       _user.group = userValue.data()["group"];
-      _listener =
-          firestoreInstance.collection("groups").snapshots().listen((result) {
+      _user.photo = userValue.data()["photoUrl"];
+      _listener = firestoreInstance
+          .collection("events")
+          .where("group", isEqualTo: userValue.data()["group"])
+          .snapshots()
+          .listen((result) {
         result.docChanges.forEach((res) {
-          if (res.doc.id == _user.group) {
-            _events = [];
-            for (var id in res.doc.data()["share_events"].keys) {
-              firestoreInstance
-                  .collection("events")
-                  .doc(id)
-                  .get()
-                  .then((eventValue) {
-                Map eventData = eventValue.data();
-                AppUser user = AppUser(
-                  id: eventData["user"],
-                  group: eventData["group"],
-                );
-                Event event = Event(
-                  id: id,
-                  title: eventData["title"],
-                  date: eventData["date"].toDate(),
-                  time: eventData["time"].toDate(),
-                  isDone: eventData["isDone"],
-                  user: user,
-                );
+          int idx = _events.indexWhere((event) => event.id == res.doc.id);
+          if (res.doc.data()["isActive"]) {
+            Map data = res.doc.data();
+            firestoreInstance
+                .collection("users")
+                .doc(data["user"])
+                .get()
+                .then((value) {
+              Event event = Event(
+                  id: res.doc.id,
+                  title: data["title"],
+                  date: data["date"].toDate(),
+                  time: data["time"].toDate(),
+                  isDone: data["isDone"],
+                  user: AppUser(
+                      id: value.id,
+                      group: userValue["group"],
+                      photo: value.data()["photoUrl"]));
+              if (idx == -1) {
                 setState(() {
                   _events.add(event);
                 });
+              } else {
+                setState(() {
+                  _events[idx] = event;
+                });
+              }
+            });
+          } else {
+            if (idx != -1) {
+              setState(() {
+                _events.removeAt(idx);
               });
             }
           }
@@ -81,7 +95,6 @@ class _EventHomeScreen extends State<EventHomeScreen> {
 
   void _handleOpenUserEventScreen() {
     setState(() {
-      _isEditMode = false;
       _openUserEventScreen = true;
     });
   }
@@ -89,18 +102,6 @@ class _EventHomeScreen extends State<EventHomeScreen> {
   void _handleCloseUserEventScreen() {
     setState(() {
       _openUserEventScreen = false;
-    });
-  }
-
-  void _handleToggleEdit() {
-    setState(() {
-      _isEditMode = !_isEditMode;
-    });
-  }
-
-  void _handleDeleteEvent(Event event) {
-    setState(() {
-      _events.remove(event);
     });
   }
 
@@ -131,22 +132,7 @@ class _EventHomeScreen extends State<EventHomeScreen> {
               style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 30)),
-          actions: <Widget>[
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 30.0),
-                child: InkWell(
-                    onTap: _handleToggleEdit,
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    child: Text(_isEditMode ? "Cancel" : "Edit",
-                        style: TextStyle(
-                            color: _isEditMode
-                                ? Color.fromRGBO(244, 94, 109, 1.0)
-                                : Color.fromRGBO(0, 108, 255, 1.0),
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold))))
-          ]),
+                  fontSize: 30))),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -155,9 +141,8 @@ class _EventHomeScreen extends State<EventHomeScreen> {
                 child: EventList(
                   events: _events,
                   user: _user,
-                  modeIsEdit: _isEditMode,
+                  modeIsEdit: false,
                   handleClickEvent: (Event event) {},
-                  handleDeleteEvent: _handleDeleteEvent,
                 )),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),

@@ -38,8 +38,6 @@ class _UserEventScreen extends State<UserEventScreen> {
     FocusScope.of(context).requestFocus(new FocusNode());
 
     if (event != null) {
-      DateTime timeCreated = DateTime.now();
-
       firestoreInstance.collection("events").add({
         "title": event.title,
         "date": event.date,
@@ -47,20 +45,7 @@ class _UserEventScreen extends State<UserEventScreen> {
         "isDone": event.isDone,
         "user": widget.user.id,
         "group": widget.user.group,
-      }).then((res) {
-        firestoreInstance
-            .collection("users")
-            .doc(widget.user.id)
-            .update({"events.${res.id}": timeCreated});
-        firestoreInstance
-            .collection("groups")
-            .doc(widget.user.group)
-            .update({"share_events.${res.id}": timeCreated});
-        setState(() {
-          event.id = res.id;
-          event.user = widget.user;
-          widget.events.add(event);
-        });
+        "isActive": true,
       });
     }
 
@@ -81,12 +66,6 @@ class _UserEventScreen extends State<UserEventScreen> {
     setState(() {
       _openSettingScreen = true;
       _cardEvent = event;
-    });
-  }
-
-  void _handleDeleteEvent(Event event) {
-    setState(() {
-      widget.events.remove(event);
     });
   }
 
@@ -138,11 +117,11 @@ class _UserEventScreen extends State<UserEventScreen> {
             ],
           ),
           body: EventList(
-              events: userEvents,
-              user: widget.user,
-              modeIsEdit: true,
-              handleClickEvent: _handleClickEvent,
-              handleDeleteEvent: _handleDeleteEvent),
+            events: userEvents,
+            user: widget.user,
+            modeIsEdit: true,
+            handleClickEvent: _handleClickEvent,
+          ),
           floatingActionButton: FloatingActionButton(
             onPressed: _handleOpenAddEventScreen,
             backgroundColor: Color.fromRGBO(0, 108, 255, 1.0),
