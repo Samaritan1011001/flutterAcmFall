@@ -25,6 +25,21 @@ class EventCard extends StatefulWidget {
 
 class _EventCard extends State<EventCard> {
   final firestoreInstance = FirebaseFirestore.instance;
+  String _photoUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    firestoreInstance
+        .collection("users")
+        .doc(widget.event.user.id)
+        .get()
+        .then((result) {
+      setState(() {
+        _photoUrl = result.data()["photoUrl"];
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,32 +108,43 @@ class _EventCard extends State<EventCard> {
                                   ]))),
                       widget.modeIsEdit &&
                               widget.user.id == widget.event.user.id
-                          ? DeleteButton(
-                              onTap: () {
-                                widget.onDeleteEvent(widget.event);
-                                firestoreInstance
-                                    .collection("events")
-                                    .doc(widget.event.id)
-                                    .delete();
-                                firestoreInstance
-                                    .collection("groups")
-                                    .doc(widget.event.user.group)
-                                    .update({
-                                  "share_events.${widget.event.id}":
-                                      FieldValue.delete()
-                                });
-                                firestoreInstance
-                                    .collection("users")
-                                    .doc(widget.event.user.id)
-                                    .update({
-                                  "events.${widget.event.id}":
-                                      FieldValue.delete()
-                                });
-                              },
-                              isActive: true,
-                            )
-                          : Icon(Icons.lens_rounded,
-                              size: 15, color: widget.event.user.color)
+                          ? Container(
+                              width: 35,
+                              height: 35,
+                              child: DeleteButton(
+                                onTap: () {
+                                  widget.onDeleteEvent(widget.event);
+                                  firestoreInstance
+                                      .collection("events")
+                                      .doc(widget.event.id)
+                                      .delete();
+                                  firestoreInstance
+                                      .collection("groups")
+                                      .doc(widget.event.user.group)
+                                      .update({
+                                    "share_events.${widget.event.id}":
+                                        FieldValue.delete()
+                                  });
+                                  firestoreInstance
+                                      .collection("users")
+                                      .doc(widget.event.user.id)
+                                      .update({
+                                    "events.${widget.event.id}":
+                                        FieldValue.delete()
+                                  });
+                                },
+                                isActive: true,
+                              ))
+                          : (_photoUrl != null
+                              ? Container(
+                                  width: 35,
+                                  height: 35,
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(_photoUrl))))
+                              : Container())
                     ]))));
   }
 }

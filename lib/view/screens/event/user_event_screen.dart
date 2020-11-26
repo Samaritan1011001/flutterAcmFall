@@ -34,13 +34,13 @@ class _UserEventScreen extends State<UserEventScreen> {
     });
   }
 
-  void _handleCloseAddEventScreen(Event event) async {
+  void _handleCloseAddEventScreen(Event event) {
     FocusScope.of(context).requestFocus(new FocusNode());
 
     if (event != null) {
       DateTime timeCreated = DateTime.now();
 
-      await firestoreInstance.collection("events").add({
+      firestoreInstance.collection("events").add({
         "title": event.title,
         "date": event.date,
         "time": event.time,

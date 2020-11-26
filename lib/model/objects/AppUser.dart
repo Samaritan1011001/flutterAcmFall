@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
-
 class AppUser {
   String id;
   String group;
-  Color color;
 
-  AppUser({this.id, this.group, this.color});
+  AppUser({this.id, this.group});
 
   String toString() {
-    return '{userID: ${this.id}, group: ${this.group}, color: ${this.color}}';
+    return '{userID: ${this.id}, group: ${this.group}}';
   }
 }

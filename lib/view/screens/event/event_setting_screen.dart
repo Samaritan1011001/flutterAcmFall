@@ -122,6 +122,7 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                           text: "Done",
                           fontWeight: FontWeight.bold,
                           onTap: () {
+                            DateTime timeUpdated = DateTime.now();
                             if (widget.isEditExistedEvent) {
                               firestoreInstance
                                   .collection("events")
@@ -133,6 +134,18 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                                 "isDone": widget.event.isDone,
                                 "user": widget.event.user.id,
                                 "group": widget.event.user.group,
+                              });
+                              firestoreInstance
+                                  .collection("users")
+                                  .doc(widget.event.user.id)
+                                  .update({
+                                "events.${widget.event.id}": timeUpdated
+                              });
+                              firestoreInstance
+                                  .collection("groups")
+                                  .doc(widget.event.user.group)
+                                  .update({
+                                "share_events.${widget.event.id}": timeUpdated
                               });
                             }
                             widget.closeSetting();
