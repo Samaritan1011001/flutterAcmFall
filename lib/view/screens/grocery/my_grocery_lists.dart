@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterAcmFall/screens/checklistCreationScreen.dart';
+import 'package:flutterAcmFall/view/screens/grocery/checklistCreationScreen.dart';
 
 class MyGroceryListsScreen extends StatefulWidget{
 
