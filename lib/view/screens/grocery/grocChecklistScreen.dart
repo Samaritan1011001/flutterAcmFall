@@ -95,6 +95,7 @@ class _ChecklistScreen extends State<ChecklistScreen>{
          toolbarHeight: 80,
          backgroundColor: Colors.white,
          shadowColor: Colors.transparent,
+         leading: LogoutButton(),
          title: Text("Group Grocery List",
              style: TextStyle(
                  color: Colors.black,
