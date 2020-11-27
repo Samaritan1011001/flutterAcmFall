@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutterAcmFall/model/objects/User.dart';
 import 'package:flutterAcmFall/view/screens/grocery/checklistCreationScreen.dart';
+import 'package:flutterAcmFall/view/screens/grocery/grocChecklistScreen.dart';
+import 'package:intl/intl.dart';
 
 class MyGroceryListsScreen extends StatefulWidget{
 
@@ -12,11 +15,12 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen>{
   @override
   Widget build(BuildContext context) {
 
-List<ChecklistModel>myGroceryList=[];
+List<Grocery>myGroceryList=[];
 
 void addToGroceryList(ChecklistModel cm){
-  myGroceryList.add(cm);
+  myGroceryList.add(Grocery(checklist:cm, isDone: false, user: User(id:"A1", group:" ")));
   print(myGroceryList.length);
+  print(myGroceryList);
   setState(() {
 
   });
@@ -50,7 +54,27 @@ void addToGroceryList(ChecklistModel cm){
           },
           child: Text("Back", style: new TextStyle(fontSize: 18, fontFamily:'SFProText',fontWeight: FontWeight.w700),
 
-          ))]));
+          ))]),
+      body:ListView.builder(
+
+          itemCount: myGroceryList.length,
+          itemBuilder: (context, index) {
+            return CheckboxListTile(
+              title: Text(myGroceryList[index].checklist.items[0].text, style: TextStyle(fontFamily: 'SFProText', fontSize: 18)),
+              subtitle: Text(DateFormat('MM/dd/yyyy – kk:mm').format(myGroceryList[index].checklist.date), style: TextStyle(fontFamily: 'SFProText', fontSize: 14)),
+              value: myGroceryList[index].isDone,
+              controlAffinity: ListTileControlAffinity.leading,
+
+              onChanged: (bool value) {
+                setState(() {
+                  myGroceryList[index].isDone = value;
+                });
+              },
+            );
+          })
+
+
+    );
    }
 
 }

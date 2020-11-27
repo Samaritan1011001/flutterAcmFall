@@ -25,17 +25,17 @@ class GroceryCard extends StatefulWidget {
 class _GroceryCard extends State<GroceryCard> {
   @override
   Widget build(BuildContext context) {
-    String title = (widget.grocery.title.length >= 25)
-        ? '${widget.grocery.title.substring(0, 25)}...'
-        : widget.grocery.title;
+    String title = (widget.grocery.checklist.items[0].text.length >= 25)
+        ? '${widget.grocery.checklist.items[0].text.substring(0, 25)}...'
+        : widget.grocery.checklist.items[0].text;
 
     Color titleColor =
         widget.grocery.isDone ? Colors.grey : Color.fromRGBO(37, 42, 49, 1.0);
 
-    Widget dateText = widget.grocery.date != null
+    Widget dateText = widget.grocery.checklist.date != null
         ? Padding(
             padding: EdgeInsets.only(top: 3.0, bottom: 3.0),
-            child: EventDateFormat(date: widget.grocery.date))
+            child: EventDateFormat(date: widget.grocery.checklist.date))
         : Container();
 
     return // debug
@@ -78,16 +78,7 @@ class _GroceryCard extends State<GroceryCard> {
                                                 color: titleColor))),
                                     Row(children: <Widget>[dateText]),
                                   ]))),
-                      widget.modeIsEdit &&
-                              widget.user.id == widget.grocery.user.id
-                          ? DeleteButton(
-                              onTap: () {
-                                widget.onDeleteEvent(widget.grocery);
-                              },
-                              isActive: true,
-                            )
-                          : Icon(Icons.lens_rounded,
-                              size: 15, color: widget.grocery.user.color)
+
                     ]))));
   }
 }

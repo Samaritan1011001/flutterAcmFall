@@ -30,11 +30,11 @@ class _GroceryList extends State<GroceryList> {
       DateFormat dateFormat = DateFormat("yyyy-MM-dd");
       DateFormat timeFormat = DateFormat("HH:mm:ss");
 
-      String dateA = dateFormat.format(a.date).toString();
+      String dateA = dateFormat.format(a.checklist.date).toString();
 
       DateTime dateTimeA = DateTime.parse(dateA);
 
-      String dateB = dateFormat.format(b.date).toString();
+      String dateB = dateFormat.format(b.checklist.date).toString();
 
       DateTime dateTimeB = DateTime.parse(dateB);
 
