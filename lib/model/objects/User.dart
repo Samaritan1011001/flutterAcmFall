@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class User {
   String id;
-  Color color;
+  String group;
 
-  User({this.id, this.color});
+  User({this.id, this.group});
 
   String toString() {
-    return '{userID: ${this.id}, color: ${this.color}}';
+    return '{id: ${this.id}, group: ${this.group}}';
   }
 }
