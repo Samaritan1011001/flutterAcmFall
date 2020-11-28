@@ -5,41 +5,24 @@ import 'package:flutterAcmFall/model/objects/AppUser.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class EventCard extends StatefulWidget {
-  EventCard(
-      {Key key,
-      this.event,
-      this.user,
-      this.modeIsEdit,
-      this.onClickEvent,
-      this.onDeleteEvent})
-      : super(key: key);
+  EventCard({
+    Key key,
+    this.event,
+    this.user,
+    this.modeIsEdit,
+    this.onClickEvent,
+  }) : super(key: key);
 
   final Event event;
   final AppUser user;
   final bool modeIsEdit;
   final Function onClickEvent;
-  final Function onDeleteEvent;
 
   _EventCard createState() => _EventCard();
 }
 
 class _EventCard extends State<EventCard> {
   final firestoreInstance = FirebaseFirestore.instance;
-  String _photoUrl;
-
-  @override
-  void initState() {
-    super.initState();
-    firestoreInstance
-        .collection("users")
-        .doc(widget.event.user.id)
-        .get()
-        .then((result) {
-      setState(() {
-        _photoUrl = result.data()["photoUrl"];
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,29 +96,14 @@ class _EventCard extends State<EventCard> {
                               height: 35,
                               child: DeleteButton(
                                 onTap: () {
-                                  widget.onDeleteEvent(widget.event);
                                   firestoreInstance
                                       .collection("events")
                                       .doc(widget.event.id)
-                                      .delete();
-                                  firestoreInstance
-                                      .collection("groups")
-                                      .doc(widget.event.user.group)
-                                      .update({
-                                    "share_events.${widget.event.id}":
-                                        FieldValue.delete()
-                                  });
-                                  firestoreInstance
-                                      .collection("users")
-                                      .doc(widget.event.user.id)
-                                      .update({
-                                    "events.${widget.event.id}":
-                                        FieldValue.delete()
-                                  });
+                                      .update({"isActive": false});
                                 },
                                 isActive: true,
                               ))
-                          : (_photoUrl != null
+                          : (widget.event.user.photo != null
                               ? Container(
                                   width: 35,
                                   height: 35,
@@ -143,7 +111,8 @@ class _EventCard extends State<EventCard> {
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
                                           fit: BoxFit.fill,
-                                          image: NetworkImage(_photoUrl))))
+                                          image: NetworkImage(
+                                              widget.event.user.photo))))
                               : Container())
                     ]))));
   }

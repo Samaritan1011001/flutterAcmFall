@@ -5,20 +5,18 @@ import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutterAcmFall/model/objects/AppUser.dart';
 
 class EventList extends StatefulWidget {
-  EventList(
-      {Key key,
-      this.events,
-      this.user,
-      this.modeIsEdit,
-      this.handleClickEvent,
-      this.handleDeleteEvent})
-      : super(key: key);
+  EventList({
+    Key key,
+    this.events,
+    this.user,
+    this.modeIsEdit,
+    this.handleClickEvent,
+  }) : super(key: key);
 
   final List<Event> events;
   final AppUser user;
   final bool modeIsEdit;
   final Function handleClickEvent;
-  final Function handleDeleteEvent;
 
   _EventList createState() => _EventList();
 }
@@ -45,11 +43,11 @@ class _EventList extends State<EventList> {
         itemCount: widget.events.length,
         itemBuilder: (context, index) {
           return EventCard(
-              event: widget.events[index],
-              user: widget.user,
-              modeIsEdit: widget.modeIsEdit,
-              onClickEvent: widget.handleClickEvent,
-              onDeleteEvent: widget.handleDeleteEvent);
+            event: widget.events[index],
+            user: widget.user,
+            modeIsEdit: widget.modeIsEdit,
+            onClickEvent: widget.handleClickEvent,
+          );
         });
   }
 }
