@@ -23,7 +23,13 @@ class _UserEventScreen extends State<UserEventScreen> {
   bool _openAddEventScreen = false;
   bool _openSettingScreen = false;
   Event _cardEvent = Event(
-      id: null, title: null, date: null, time: null, isDone: false, user: null);
+      id: null,
+      title: null,
+      date: null,
+      time: null,
+      isDone: false,
+      isPrivate: false,
+      user: null);
 
   void _handleOpenAddEventScreen() {
     setState(() {
