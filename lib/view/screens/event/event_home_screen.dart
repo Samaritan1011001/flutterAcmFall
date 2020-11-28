@@ -58,6 +58,7 @@ class _EventHomeScreen extends State<EventHomeScreen> {
                   date: data["date"].toDate(),
                   time: data["time"].toDate(),
                   isDone: data["isDone"],
+                  isPrivate: data["isPrivate"],
                   user: AppUser(
                       id: value.id,
                       group: userValue["group"],
@@ -104,15 +105,20 @@ class _EventHomeScreen extends State<EventHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int userEventsCount = 0;
+    List<Event> shareEvents = [];
+    List<Event> userEvents = [];
     for (int i = 0; i < _events.length; i++) {
       if (_events[i].user.id == _user.id) {
-        userEventsCount += 1;
+        userEvents.add(_events[i]);
+      }
+
+      if (!_events[i].isPrivate) {
+        shareEvents.add(_events[i]);
       }
     }
 
     Widget userEventScreen = UserEventScreen(
-      events: _events,
+      events: userEvents,
       user: _user,
       isOpen: _openUserEventScreen,
       closeUserEventScreen: _handleCloseUserEventScreen,
@@ -136,7 +142,7 @@ class _EventHomeScreen extends State<EventHomeScreen> {
             Container(
                 height: MediaQuery.of(context).size.height - 130 - 112 - 70,
                 child: EventList(
-                  events: _events,
+                  events: shareEvents,
                   user: _user,
                   modeIsEdit: false,
                   handleClickEvent: (Event event) {},
@@ -163,10 +169,10 @@ class _EventHomeScreen extends State<EventHomeScreen> {
                                           fontSize: 25,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white)),
-                                  userEventsCount > 0
+                                  userEvents.length > 0
                                       ? Text(
-                                          "$userEventsCount " +
-                                              (userEventsCount == 1
+                                          "${userEvents.length} " +
+                                              (userEvents.length == 1
                                                   ? "event"
                                                   : "events"),
                                           style: TextStyle(

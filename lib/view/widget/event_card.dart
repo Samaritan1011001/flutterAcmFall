@@ -26,8 +26,8 @@ class _EventCard extends State<EventCard> {
 
   @override
   Widget build(BuildContext context) {
-    String title = (widget.event.title.length >= 25)
-        ? '${widget.event.title.substring(0, 25)}...'
+    String title = (widget.event.title.length > 30)
+        ? '${widget.event.title.substring(0, 30)}...'
         : widget.event.title;
 
     Color titleColor =
@@ -45,75 +45,72 @@ class _EventCard extends State<EventCard> {
             child: EventTimeFormat(time: widget.event.time))
         : Container();
 
-    return // debug
-        Container(
-            height: 70,
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(
-                        color: Color.fromRGBO(235, 239, 245, 1.0), width: 2))),
-            child: InkWell(
-                onTap: () {
-                  widget.onClickEvent(widget.event);
-                },
-                highlightColor: Colors.transparent,
-                splashColor: Colors.transparent,
-                child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 18.0),
-                    child: Row(children: <Widget>[
-                      RadioButton(
-                        onTap: () {
-                          setState(() {
-                            widget.event.isDone = !widget.event.isDone;
-                            firestoreInstance
-                                .collection("events")
-                                .doc(widget.event.id)
-                                .update({"isDone": widget.event.isDone});
-                          });
-                        },
-                        isActive: widget.event.isDone,
-                      ),
-                      Expanded(
-                          child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Padding(
-                                        padding:
-                                            EdgeInsets.symmetric(vertical: 3.0),
-                                        child: Text(title,
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                color: titleColor))),
-                                    Row(children: <Widget>[dateText, timeText]),
-                                  ]))),
-                      widget.modeIsEdit &&
-                              widget.user.id == widget.event.user.id
+    return Container(
+        height: 70,
+        decoration: BoxDecoration(
+            border: Border(
+                bottom: BorderSide(
+                    color: Color.fromRGBO(235, 239, 245, 1.0), width: 2))),
+        child: InkWell(
+            onTap: () {
+              widget.onClickEvent(widget.event);
+            },
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18.0),
+                child: Row(children: <Widget>[
+                  RadioButton(
+                    onTap: () {
+                      setState(() {
+                        widget.event.isDone = !widget.event.isDone;
+                        firestoreInstance
+                            .collection("events")
+                            .doc(widget.event.id)
+                            .update({"isDone": widget.event.isDone});
+                      });
+                    },
+                    isActive: widget.event.isDone,
+                  ),
+                  Expanded(
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 3.0),
+                                    child: Text(title,
+                                        style: TextStyle(
+                                            fontSize: 18, color: titleColor))),
+                                Row(children: <Widget>[dateText, timeText]),
+                              ]))),
+                  widget.modeIsEdit && widget.user.id == widget.event.user.id
+                      ? Container(
+                          width: 35,
+                          height: 35,
+                          child: DeleteButton(
+                            onTap: () {
+                              firestoreInstance
+                                  .collection("events")
+                                  .doc(widget.event.id)
+                                  .update({"isActive": false});
+                            },
+                            isActive: true,
+                          ))
+                      : (widget.event.user.photo != null
                           ? Container(
-                              width: 35,
-                              height: 35,
-                              child: DeleteButton(
-                                onTap: () {
-                                  firestoreInstance
-                                      .collection("events")
-                                      .doc(widget.event.id)
-                                      .update({"isActive": false});
-                                },
-                                isActive: true,
-                              ))
-                          : (widget.event.user.photo != null
-                              ? Container(
-                                  width: 35,
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          fit: BoxFit.fill,
-                                          image: NetworkImage(
-                                              widget.event.user.photo))))
-                              : Container())
-                    ]))));
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: NetworkImage(
+                                          widget.event.user.photo))))
+                          : Container())
+                ]))));
   }
 }

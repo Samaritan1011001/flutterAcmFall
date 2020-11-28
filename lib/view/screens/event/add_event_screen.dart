@@ -3,13 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutterAcmFall/view/screens/event/event_setting_screen.dart';
 import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddEventScreen extends StatefulWidget {
   AddEventScreen({
     Key key,
+    this.user,
     this.closeScreen,
   }) : super(key: key);
 
+  final AppUser user;
   final Function closeScreen;
 
   @override
@@ -17,8 +21,15 @@ class AddEventScreen extends StatefulWidget {
 }
 
 class _AddEventScreen extends State<AddEventScreen> {
+  final firestoreInstance = FirebaseFirestore.instance;
   Event _event = Event(
-      id: null, title: null, date: null, time: null, isDone: false, user: null);
+      id: null,
+      title: null,
+      date: null,
+      time: null,
+      isDone: false,
+      isPrivate: false,
+      user: null);
 
   TextEditingController _controller = TextEditingController();
 
@@ -75,7 +86,7 @@ class _AddEventScreen extends State<AddEventScreen> {
                   text: "Cancel",
                   fontWeight: FontWeight.normal,
                   onTap: () {
-                    widget.closeScreen(null);
+                    widget.closeScreen();
                   },
                   isActive: true)),
           actions: <Widget>[
@@ -89,7 +100,20 @@ class _AddEventScreen extends State<AddEventScreen> {
                   onTap: () {
                     FocusScope.of(context).requestFocus(new FocusNode());
                     if (validTitle && validDateTime) {
-                      widget.closeScreen(_event);
+                      if (_event != null) {
+                        firestoreInstance.collection("events").add({
+                          "title": _event.title,
+                          "date": _event.date,
+                          "time": _event.time,
+                          "isDone": _event.isDone,
+                          "isPrivate": _event.isPrivate,
+                          "user": widget.user.id,
+                          "group": widget.user.group,
+                          "isActive": true,
+                        });
+                      }
+
+                      widget.closeScreen();
                     } else {
                       String alert = "Missing " +
                           (validTitle ? "" : "event title") +

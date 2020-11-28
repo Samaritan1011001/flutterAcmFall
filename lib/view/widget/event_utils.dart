@@ -39,8 +39,8 @@ class DeleteButton extends StatelessWidget {
         splashColor: Colors.transparent,
         child: isActive
             ? Icon(Icons.delete_outlined,
-                color: Color.fromRGBO(244, 94, 109, 1.0), size: 28)
-            : Icon(Icons.delete_outlined, color: Colors.grey, size: 28));
+                color: Color.fromRGBO(244, 94, 109, 1.0), size: 25)
+            : Icon(Icons.delete_outlined, color: Colors.grey, size: 25));
   }
 }
 
@@ -57,8 +57,8 @@ class RadioButton extends StatelessWidget {
         splashColor: Colors.transparent,
         child: isActive
             ? Icon(Icons.radio_button_checked,
-                color: Color.fromRGBO(0, 108, 255, 1.0), size: 28)
-            : Icon(Icons.radio_button_unchecked, color: Colors.grey, size: 28));
+                color: Color.fromRGBO(0, 108, 255, 1.0), size: 25)
+            : Icon(Icons.radio_button_unchecked, color: Colors.grey, size: 25));
   }
 }
 
@@ -70,11 +70,11 @@ class EventDateFormat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: <Widget>[
-      Icon(Icons.calendar_today_outlined, size: 15, color: Colors.grey),
+      Icon(Icons.calendar_today_outlined, size: 14, color: Colors.grey),
       Padding(
           padding: EdgeInsets.only(left: 6.0),
           child: Text(DateFormat.MMMd('en_US').format(date),
-              style: TextStyle(fontSize: 15, color: Colors.grey)))
+              style: TextStyle(fontSize: 14, color: Colors.grey)))
     ]);
   }
 }
@@ -87,11 +87,11 @@ class EventTimeFormat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: <Widget>[
-      Icon(Icons.access_time_outlined, size: 15, color: Colors.grey),
+      Icon(Icons.access_time_outlined, size: 14, color: Colors.grey),
       Padding(
           padding: EdgeInsets.only(left: 6.0),
           child: Text(DateFormat.jm().format(time),
-              style: TextStyle(fontSize: 15, color: Colors.grey)))
+              style: TextStyle(fontSize: 14, color: Colors.grey)))
     ]);
   }
 }
@@ -108,7 +108,7 @@ class ToggleButton extends StatelessWidget {
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         child: Icon((isActive ? Icons.toggle_on : Icons.toggle_off),
-            color: (isActive ? Colors.green : Colors.grey), size: 55));
+            color: (isActive ? Colors.green : Colors.grey), size: 50));
   }
 }
 
