@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterAcmFall/model/auth_model.dart';
-import 'package:flutterAcmFall/view/screens/home_screen.dart';
+import 'package:flutterAcmFall/main.dart';
 
 class GroupCreateScreen extends StatelessWidget {
   @override
@@ -74,7 +74,7 @@ class CreateGroupFormState extends State<CreateGroupForm> {
                         .update({"group": res.id}).then((_) {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                        MaterialPageRoute(builder: (context) => MyApp()),
                       );
                     });
                   });
