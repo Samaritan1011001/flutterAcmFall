@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:flutterAcmFall/model/objects/User.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
 import 'package:flutterAcmFall/view/screens/grocery/checklistCreationScreen.dart';
 import 'package:flutterAcmFall/view/screens/grocery/my_grocery_lists.dart';
 import 'package:flutterAcmFall/view/widget/logout_button.dart';
@@ -133,7 +133,7 @@ class _ChecklistScreen extends State<ChecklistScreen>{
   class Grocery{
     ChecklistModel checklist;
     bool isDone;
-    User user;
+    AppUser user;
 
     Grocery({this.checklist, this.isDone, this.user});
 
