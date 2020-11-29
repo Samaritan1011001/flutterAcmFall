@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterAcmFall/model/objects/User.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
 import 'package:flutterAcmFall/view/screens/grocery/checklistCreationScreen.dart';
 import 'package:flutterAcmFall/view/screens/grocery/grocChecklistScreen.dart';
 import 'package:intl/intl.dart';
@@ -18,7 +18,7 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen>{
 List<Grocery>myGroceryList=[];
 
 void addToGroceryList(ChecklistModel cm){
-  myGroceryList.add(Grocery(checklist:cm, isDone: false, user: User(id:"A1", group:" ")));
+  myGroceryList.add(Grocery(checklist:cm, isDone: false, user: AppUser(id:"A1", group:" ")));
   print(myGroceryList.length);
   print(myGroceryList);
   setState(() {
