@@ -61,13 +61,13 @@ class CreateGroupFormState extends State<CreateGroupForm> {
             child: ElevatedButton(
               onPressed: () {
                 // Validate returns true if the form is valid
+                User currentUser =
+                    Provider.of<AuthModel>(context, listen: false).getUser();
                 if (_formKey.currentState.validate()) {
                   firestoreInstance.collection("groups").add({
                     "name": nameController.text,
+                    "users": [currentUser.uid],
                   }).then((res) {
-                    User currentUser =
-                        Provider.of<AuthModel>(context, listen: false)
-                            .getUser();
                     firestoreInstance
                         .collection("users")
                         .doc(currentUser.uid)
