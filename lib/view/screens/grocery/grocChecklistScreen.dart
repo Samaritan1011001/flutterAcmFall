@@ -126,7 +126,7 @@ class _ChecklistScreen extends State<ChecklistScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
-                  height: MediaQuery.of(context).size.height - 130 - 112 - 70,
+                  height: MediaQuery.of(context).size.height - 130 - 112 - 70 - 15,
                   child: ListView.builder(
                       itemCount: _groceries.length,
                       itemBuilder: (context, index) {
