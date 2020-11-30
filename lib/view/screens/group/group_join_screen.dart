@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterAcmFall/model/auth_model.dart';
-import 'package:flutterAcmFall/view/screens/home_screen.dart';
+import 'package:flutterAcmFall/main.dart';
 
 class GroupJoinScreen extends StatelessWidget {
   @override
@@ -75,10 +75,18 @@ class JoinGroupFormState extends State<JoinGroupForm> {
                           .collection("users")
                           .doc(currentUser.uid)
                           .update({"group": keyController.text}).then((_) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
+                        firestoreInstance
+                            .collection("groups")
+                            .doc(keyController.text)
+                            .update({
+                          "users": FieldValue.arrayUnion([currentUser.uid])
+                        }).then((_) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MyApp()),
+                          );
+                        });
                       });
                     } else {
                       // TODO: non exist group key

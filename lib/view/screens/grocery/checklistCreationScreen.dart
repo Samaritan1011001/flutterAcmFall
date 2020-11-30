@@ -65,7 +65,9 @@ class _ChecklistCreationScreen extends State<ChecklistCreationScreen> {
           FlatButton(
             textColor: Color.fromRGBO(0, 108, 255, 1),
             onPressed: () {
-              callback(checklistModel);
+              if(createNew == true){
+                callback(checklistModel);
+              }
               Navigator.pop(context);
             },
             child: Text(
@@ -126,10 +128,14 @@ class _ChecklistCreationScreen extends State<ChecklistCreationScreen> {
                         fontSize: 18,
                         color: Color.fromRGBO(37, 42, 49, 1)),
                     onSubmitted: (String input) {
-                      if (input.isNotEmpty) {
-                        checklistModel.items.add(
-                            ChecklistItemModel(text: "", isChecked: false));
-                      }
+                      setState((){
+                        if (input.isNotEmpty) {
+                          checklistModel.items.add(
+                              ChecklistItemModel(text: "", isChecked: false));
+                        }
+                      });
+
+
                     },
                     controller:
                         checklistModel.items[index]._textEditingController,
@@ -142,19 +148,24 @@ class _ChecklistCreationScreen extends State<ChecklistCreationScreen> {
                           color: Color.fromRGBO(135, 135, 135, 1)),
                     ),
                     onChanged: (String val) {
-                      checklistModel.items[index].text = val;
+                      setState(() {
+                        checklistModel.items[index].text = val;
+                      });
+
                     },
                   ),
                   trailing: IconButton(
                       icon: Icon(Icons.clear_rounded),
                       color: Colors.grey.withOpacity(0.9),
                       onPressed: () {
-                        if (index == 0) {
+                        if (checklistModel.items.length ==1) {
                           setState(() {
                             checklistModel.items[index]._textEditingController
                                 .clear();
                           });
-                        } else {
+                        }
+
+                        else {
                           setState(() {
                             checklistModel.items.removeAt(index);
                           });

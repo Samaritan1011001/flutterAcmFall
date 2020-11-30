@@ -49,6 +49,13 @@ class _EventSettingScreen extends State<EventSettingScreen> {
     });
   }
 
+  void _togglePrivate() {
+    FocusScope.of(context).requestFocus(new FocusNode());
+    setState(() {
+      widget.event.isPrivate = !widget.event.isPrivate;
+    });
+  }
+
   void _handleChangeTitle(String title) {
     setState(() {
       widget.event.title = title;
@@ -72,7 +79,7 @@ class _EventSettingScreen extends State<EventSettingScreen> {
         ? Padding(
             padding: EdgeInsets.only(top: 10),
             child: Container(
-              height: 50,
+              height: 45,
               color: Colors.white,
               child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 18.0),
@@ -132,6 +139,7 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                                 "date": widget.event.date,
                                 "time": widget.event.time,
                                 "isDone": widget.event.isDone,
+                                "isPrivate": widget.event.isPrivate,
                                 "user": widget.event.user.id,
                                 "group": widget.event.user.group,
                               });
@@ -150,7 +158,7 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                   Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: Container(
-                          height: 50,
+                          height: 45,
                           color: Colors.white,
                           child: TextFormField(
                             controller: widget.controller,
@@ -171,7 +179,28 @@ class _EventSettingScreen extends State<EventSettingScreen> {
                   Padding(
                       padding: EdgeInsets.only(top: 10),
                       child: Container(
-                        height: 50,
+                        height: 45,
+                        color: Colors.white,
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 18.0),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text("Set event privacy",
+                                      style: TextStyle(
+                                          color:
+                                              Color.fromRGBO(37, 42, 49, 1.0),
+                                          fontSize: 18)),
+                                  ToggleButton(
+                                      onTap: _togglePrivate,
+                                      isActive: widget.event.isPrivate),
+                                ])),
+                      )),
+                  Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Container(
+                        height: 45,
                         color: Colors.white,
                         child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 18.0),

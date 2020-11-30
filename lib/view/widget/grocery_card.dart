@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterAcmFall/model/objects/User.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
 import 'package:flutterAcmFall/view/screens/grocery/grocChecklistScreen.dart';
 import 'package:flutterAcmFall/view/widget/grocery_utils.dart';
 
@@ -14,7 +14,7 @@ class GroceryCard extends StatefulWidget {
       : super(key: key);
 
   final Grocery grocery;
-  final User user;
+  final AppUser user;
   final bool modeIsEdit;
   final Function onClickEvent;
   final Function onDeleteEvent;

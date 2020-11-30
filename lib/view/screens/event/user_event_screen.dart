@@ -5,7 +5,6 @@ import 'package:flutterAcmFall/view/widget/event_list.dart';
 import 'package:flutterAcmFall/view/widget/event_utils.dart';
 import 'package:flutterAcmFall/model/objects/Event.dart';
 import 'package:flutterAcmFall/model/objects/AppUser.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserEventScreen extends StatefulWidget {
   UserEventScreen(
@@ -21,12 +20,16 @@ class UserEventScreen extends StatefulWidget {
 }
 
 class _UserEventScreen extends State<UserEventScreen> {
-  final firestoreInstance = FirebaseFirestore.instance;
-
   bool _openAddEventScreen = false;
   bool _openSettingScreen = false;
   Event _cardEvent = Event(
-      id: null, title: null, date: null, time: null, isDone: false, user: null);
+      id: null,
+      title: null,
+      date: null,
+      time: null,
+      isDone: false,
+      isPrivate: false,
+      user: null);
 
   void _handleOpenAddEventScreen() {
     setState(() {
@@ -34,20 +37,8 @@ class _UserEventScreen extends State<UserEventScreen> {
     });
   }
 
-  void _handleCloseAddEventScreen(Event event) {
+  void _handleCloseAddEventScreen() {
     FocusScope.of(context).requestFocus(new FocusNode());
-
-    if (event != null) {
-      firestoreInstance.collection("events").add({
-        "title": event.title,
-        "date": event.date,
-        "time": event.time,
-        "isDone": event.isDone,
-        "user": widget.user.id,
-        "group": widget.user.group,
-        "isActive": true,
-      });
-    }
 
     setState(() {
       _openAddEventScreen = false;
@@ -70,15 +61,8 @@ class _UserEventScreen extends State<UserEventScreen> {
   }
 
   Widget build(BuildContext context) {
-    List<Event> userEvents = [];
-    for (int i = 0; i < widget.events.length; i++) {
-      if (widget.events[i].user.id == widget.user.id) {
-        userEvents.add(widget.events[i]);
-      }
-    }
-
-    Widget addEventScreen =
-        AddEventScreen(closeScreen: _handleCloseAddEventScreen);
+    Widget addEventScreen = AddEventScreen(
+        user: widget.user, closeScreen: _handleCloseAddEventScreen);
 
     Widget settingEventScreen = EventSettingScreen(
         event: _cardEvent,
@@ -117,7 +101,7 @@ class _UserEventScreen extends State<UserEventScreen> {
             ],
           ),
           body: EventList(
-            events: userEvents,
+            events: widget.events,
             user: widget.user,
             modeIsEdit: true,
             handleClickEvent: _handleClickEvent,

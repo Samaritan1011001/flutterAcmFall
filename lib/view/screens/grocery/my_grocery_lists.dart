@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutterAcmFall/model/objects/User.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
 import 'package:flutterAcmFall/view/screens/grocery/checklistCreationScreen.dart';
 import 'package:flutterAcmFall/view/screens/grocery/grocChecklistScreen.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +13,7 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen> {
 
   void addToGroceryList(ChecklistModel cm) {
     myGroceryList.add(Grocery(
-        checklist: cm, isDone: false, user: User(id: "A1", group: " ")));
+        checklist: cm, isDone: false, user: AppUser(id: "A1", group: " ")));
     print(myGroceryList.length);
     print(myGroceryList);
     setState(() {});
@@ -21,6 +21,8 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
@@ -31,7 +33,7 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen> {
                     callback: addToGroceryList,
                     checklistModel:
                         ChecklistModel(date: DateTime.now(), items: []),
-                createNew: true)));
+                    createNew: true)));
           },
         ),
         appBar: AppBar(
@@ -66,7 +68,7 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen> {
                         builder: (context) => ChecklistCreationScreen(
                             callback: addToGroceryList,
                             checklistModel: myGroceryList[index].checklist,
-                        createNew: false)));
+                            createNew: false)));
                   },
                   child: ListTile(
                     leading: Checkbox(

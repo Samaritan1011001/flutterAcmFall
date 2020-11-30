@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutterAcmFall/model/auth_model.dart';
-import 'package:flutterAcmFall/view/screens/home_screen.dart';
+import 'package:flutterAcmFall/main.dart';
 
 class GroupCreateScreen extends StatelessWidget {
   @override
@@ -61,20 +61,20 @@ class CreateGroupFormState extends State<CreateGroupForm> {
             child: ElevatedButton(
               onPressed: () {
                 // Validate returns true if the form is valid
+                User currentUser =
+                    Provider.of<AuthModel>(context, listen: false).getUser();
                 if (_formKey.currentState.validate()) {
                   firestoreInstance.collection("groups").add({
                     "name": nameController.text,
+                    "users": [currentUser.uid],
                   }).then((res) {
-                    User currentUser =
-                        Provider.of<AuthModel>(context, listen: false)
-                            .getUser();
                     firestoreInstance
                         .collection("users")
                         .doc(currentUser.uid)
                         .update({"group": res.id}).then((_) {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                        MaterialPageRoute(builder: (context) => MyApp()),
                       );
                     });
                   });
