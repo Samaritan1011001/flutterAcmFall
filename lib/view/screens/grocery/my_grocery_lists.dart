@@ -4,6 +4,8 @@ import 'package:flutterAcmFall/view/screens/grocery/checklistCreationScreen.dart
 import 'package:flutterAcmFall/view/screens/grocery/grocChecklistScreen.dart';
 import 'package:intl/intl.dart';
 
+typedef void CountCallback(int count);
+
 class MyGroceryListsScreen extends StatefulWidget {
   _MyGroceryListsScreen createState() => _MyGroceryListsScreen();
 }

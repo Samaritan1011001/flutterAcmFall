@@ -22,6 +22,7 @@ class _ChecklistScreen extends State<ChecklistScreen> {
   List<Grocery> _groceries = [];
   AppUser _user = AppUser(id: null, group: null);
 
+  int myGrocerListCount = 0;
   /*List<Grocery> grocery = [
 
     Grocery(
@@ -134,6 +135,7 @@ class _ChecklistScreen extends State<ChecklistScreen> {
             }
           }
         });
+
       });
     });
   }
@@ -146,13 +148,18 @@ class _ChecklistScreen extends State<ChecklistScreen> {
 
   @override
   Widget build(BuildContext context) {
-    /*int userGrocCount = 0;
-    for(int i=0; i<ChecklistModel().items.length; i++){
-      if(ChecklistModel().items[i].User.id == _user.id){
-        userGrocCount +=1;
+    List<Grocery> sharedGroceries = [];
+    List<Grocery> userGroceries = [];
+    for (int i = 0; i < _groceries.length; i++) {
+      if (_groceries[i].user.id == _user.id) {
+        userGroceries.add(_groceries[i]);
       }
 
-    }*/
+//      if (!_groceries[i].isPrivate) {
+      sharedGroceries.add(_groceries[i]);
+//      }
+    }
+    myGrocerListCount = userGroceries.length;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -177,22 +184,22 @@ class _ChecklistScreen extends State<ChecklistScreen> {
 
                   height: MediaQuery.of(context).size.height - 130 - 112 - 70 - 15,
                   child: ListView.builder(
-                      itemCount: _groceries.length,
+                      itemCount: sharedGroceries.length,
                       itemBuilder: (context, index) {
                         return CheckboxListTile(
-                          title: Text(_groceries[index].checklist.items[0].text,
+                          title: Text(sharedGroceries[index].checklist.items[0].text,
                               style: TextStyle(
                                   fontFamily: 'SFProText', fontSize: 18)),
                           subtitle: Text(
                               DateFormat('MM/dd/yyyy – kk:mm')
-                                  .format(_groceries[index].checklist.date),
+                                  .format(sharedGroceries[index].checklist.date),
                               style: TextStyle(
                                   fontFamily: 'SFProText', fontSize: 14)),
-                          value: _groceries[index].isDone,
+                          value: sharedGroceries[index].isDone,
                           controlAffinity: ListTileControlAffinity.leading,
                           onChanged: (bool value) {
                             setState(() {
-                              _groceries[index].isDone = value;
+                              sharedGroceries[index].isDone = value;
                             });
                           },
                         );
@@ -202,7 +209,9 @@ class _ChecklistScreen extends State<ChecklistScreen> {
                   child: InkWell(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => MyGroceryListsScreen()));
+                          builder: (context) => MyGroceryListsScreen(
+
+                          )));
                     },
                     highlightColor: Colors.transparent,
                     splashColor: Colors.transparent,
@@ -222,17 +231,17 @@ class _ChecklistScreen extends State<ChecklistScreen> {
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white)),
-                                /*userGrocCount > 0
+                                myGrocerListCount > 0
                                 ? Text(
-                                "$userGrocCount " +
-                                    (userGrocCount == 1
+                                "$myGrocerListCount " +
+                                    (myGrocerListCount == 1
                                         ? "grocery list"
                                         : "grocery lists"),
                                 style: TextStyle(
                                     fontSize: 18,
                                     color: Color.fromRGBO(
                                         244, 244, 244, 0.5)))
-                                : Container()*/
+                                : Container()
                               ])),
                     ),
                   ))

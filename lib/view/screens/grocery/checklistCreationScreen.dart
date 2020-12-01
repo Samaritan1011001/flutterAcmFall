@@ -65,7 +65,7 @@ class _ChecklistCreationScreen extends State<ChecklistCreationScreen> {
           FlatButton(
             textColor: Color.fromRGBO(0, 108, 255, 1),
             onPressed: () {
-              if(createNew == true){
+              if(createNew == true && checklistModel.items[0].text.isNotEmpty){
                 callback(checklistModel);
               }
               Navigator.pop(context);
