@@ -248,10 +248,6 @@ class Grocery {
   AppUser user;
 
   Grocery({this.id, this.checklist, this.isDone, this.user});
-<<<<<<< HEAD
-=======
-
->>>>>>> 5c63363de6886c1e5866ea323b9b8ead1cd04ad0
 
   String toString() {
     return '{checklist: ${this.checklist}, isDone: ${this.isDone}, user: $user, id: $id}';
