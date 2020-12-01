@@ -1,40 +1,48 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutterAcmFall/view/screens/grocery/grocChecklistScreen.dart';
-import 'package:flutterAcmFall/view/screens/grocery/my_grocery_lists.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutterAcmFall/model/objects/AppUser.dart';
 
 typedef void ListCallback(ChecklistModel cm);
 
 class ChecklistCreationScreen extends StatefulWidget {
   @override
-  _ChecklistCreationScreen createState() =>
-      _ChecklistCreationScreen(callback: callback, checklistModel: checklistModel, createNew: createNew);
+  _ChecklistCreationScreen createState() => _ChecklistCreationScreen(
+      callback: callback,
+      user: user,
+      checklistModel: checklistModel,
+      createNew: createNew);
 
   final ListCallback callback;
+  final AppUser user;
   final ChecklistModel checklistModel;
   final bool createNew;
-  ChecklistCreationScreen({this.callback, this.checklistModel, this.createNew});
+  ChecklistCreationScreen(
+      {this.callback, this.user, this.checklistModel, this.createNew});
 }
 
 class _ChecklistCreationScreen extends State<ChecklistCreationScreen> {
+  final firestoreInstance = FirebaseFirestore.instance;
   final ListCallback callback;
+  AppUser user;
   bool createNew;
 
-  _ChecklistCreationScreen({this.callback, this.checklistModel,this.createNew});
+  _ChecklistCreationScreen(
+      {this.callback, this.user, this.checklistModel, this.createNew});
 
-  ChecklistModel checklistModel = ChecklistModel(date: DateTime.now(), items: []);
+  ChecklistModel checklistModel =
+      ChecklistModel(date: DateTime.now(), items: []);
 
   initState() {
-    if(createNew==true){
+    user = widget.user;
+    if (createNew == true) {
       checklistModel.items.add(ChecklistItemModel(text: "", isChecked: false));
-
     }
 
     super.initState();
   }
-
 
   bool isChecked = false;
   @override
@@ -65,8 +73,17 @@ class _ChecklistCreationScreen extends State<ChecklistCreationScreen> {
           FlatButton(
             textColor: Color.fromRGBO(0, 108, 255, 1),
             onPressed: () {
-              if(createNew == true){
+              if (createNew == true) {
                 callback(checklistModel);
+              } else {
+                firestoreInstance.collection("groceries").add({
+                  "checklist": checklistModel.items,
+                  "date": checklistModel.date,
+                  "isActive": true,
+                  "isDone": false,
+                  "time": checklistModel.date,
+                  "user": user.id
+                });
               }
               Navigator.pop(context);
             },
@@ -113,68 +130,61 @@ class _ChecklistCreationScreen extends State<ChecklistCreationScreen> {
           itemCount: checklistModel.items.length,
           itemBuilder: (BuildContext context, int index) {
             return Center(
-              child: ListTile(
-                  leading: Checkbox(
-                    value: checklistModel.items[index].isChecked,
-                    onChanged: (bool value) {
+                child: ListTile(
+              leading: Checkbox(
+                value: checklistModel.items[index].isChecked,
+                onChanged: (bool value) {
+                  setState(() {
+                    checklistModel.items[index].isChecked = value;
+                  });
+                },
+              ),
+              title: TextField(
+                style: TextStyle(
+                    fontFamily: 'SFProText',
+                    fontSize: 18,
+                    color: Color.fromRGBO(37, 42, 49, 1)),
+                onSubmitted: (String input) {
+                  setState(() {
+                    if (input.isNotEmpty) {
+                      checklistModel.items
+                          .add(ChecklistItemModel(text: "", isChecked: false));
+                    }
+                  });
+                },
+                controller: checklistModel.items[index]._textEditingController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "What do you want to do?",
+                  hintStyle: TextStyle(
+                      fontFamily: 'SFProText',
+                      fontSize: 18,
+                      color: Color.fromRGBO(135, 135, 135, 1)),
+                ),
+                onChanged: (String val) {
+                  setState(() {
+                    checklistModel.items[index].text = val;
+                  });
+                },
+              ),
+              trailing: IconButton(
+                  icon: Icon(Icons.clear_rounded),
+                  color: Colors.grey.withOpacity(0.9),
+                  onPressed: () {
+                    if (checklistModel.items.length == 1) {
                       setState(() {
-                        checklistModel.items[index].isChecked = value;
+                        checklistModel.items[index]._textEditingController
+                            .clear();
                       });
-                    },
-                  ),
-                  title: TextField(
-                    style: TextStyle(
-                        fontFamily: 'SFProText',
-                        fontSize: 18,
-                        color: Color.fromRGBO(37, 42, 49, 1)),
-                    onSubmitted: (String input) {
-                      setState((){
-                        if (input.isNotEmpty) {
-                          checklistModel.items.add(
-                              ChecklistItemModel(text: "", isChecked: false));
-                        }
-                      });
-
-
-                    },
-                    controller:
-                        checklistModel.items[index]._textEditingController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "What do you want to do?",
-                      hintStyle: TextStyle(
-                          fontFamily: 'SFProText',
-                          fontSize: 18,
-                          color: Color.fromRGBO(135, 135, 135, 1)),
-                    ),
-                    onChanged: (String val) {
+                    } else {
                       setState(() {
-                        checklistModel.items[index].text = val;
+                        checklistModel.items.removeAt(index);
                       });
+                      // }
 
-                    },
-                  ),
-                  trailing: IconButton(
-                      icon: Icon(Icons.clear_rounded),
-                      color: Colors.grey.withOpacity(0.9),
-                      onPressed: () {
-                        if (checklistModel.items.length ==1) {
-                          setState(() {
-                            checklistModel.items[index]._textEditingController
-                                .clear();
-                          });
-                        }
-
-                        else {
-                          setState(() {
-                            checklistModel.items.removeAt(index);
-                          });
-                          // }
-
-                        }
-                      }),
-
-              ) );
+                    }
+                  }),
+            ));
           }),
     );
   }
