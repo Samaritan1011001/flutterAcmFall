@@ -10,8 +10,11 @@ class GroupCreateScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create you group"),
-      ),
+          toolbarHeight: 80,
+          backgroundColor: Colors.teal,
+          shadowColor: Colors.transparent,
+          title: Text("Create Your Group",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28))),
       body: CreateGroupForm(),
     );
   }
@@ -41,49 +44,59 @@ class CreateGroupFormState extends State<CreateGroupForm> {
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            controller: nameController,
-            decoration: const InputDecoration(
-              hintText: 'Enter your group name',
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // Validate returns true if the form is valid
-                User currentUser =
-                    Provider.of<AuthModel>(context, listen: false).getUser();
-                if (_formKey.currentState.validate()) {
-                  firestoreInstance.collection("groups").add({
-                    "name": nameController.text,
-                    "users": [currentUser.uid],
-                  }).then((res) {
-                    firestoreInstance
-                        .collection("users")
-                        .doc(currentUser.uid)
-                        .update({"group": res.id}).then((_) {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyApp()),
-                      );
-                    });
-                  });
+      child: Container(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+              style: TextStyle(fontSize: 20.0),
+              controller: nameController,
+              decoration: const InputDecoration(
+                hintText: 'Enter your group name',
+              ),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter some text';
                 }
+                return null;
               },
-              child: Text('Create'),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Validate returns true if the form is valid
+                  User currentUser =
+                      Provider.of<AuthModel>(context, listen: false).getUser();
+                  if (_formKey.currentState.validate()) {
+                    firestoreInstance.collection("groups").add({
+                      "name": nameController.text,
+                      "users": [currentUser.uid],
+                    }).then((res) {
+                      firestoreInstance
+                          .collection("users")
+                          .doc(currentUser.uid)
+                          .update({"group": res.id}).then((_) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyApp()),
+                        );
+                      });
+                    });
+                  }
+                },
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.teal)),
+                child: Text(
+                  'Create',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
