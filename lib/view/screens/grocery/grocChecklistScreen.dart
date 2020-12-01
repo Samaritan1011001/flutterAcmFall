@@ -15,12 +15,11 @@ class ChecklistScreen extends StatefulWidget {
 }
 
 class _ChecklistScreen extends State<ChecklistScreen> {
-
   final firestoreInstance = FirebaseFirestore.instance;
   StreamSubscription<QuerySnapshot> _listener;
 
   List<Grocery> _groceries = [];
-  AppUser _user = AppUser(id: null, group: null);
+  AppUser _user = AppUser(id: null, group: null, photo: null);
 
   /*List<Grocery> grocery = [
 
@@ -104,12 +103,14 @@ class _ChecklistScreen extends State<ChecklistScreen> {
                 .get()
                 .then((value) {
               List<ChecklistItemModel> checklistitems = data["checklist"]
-                  .map<ChecklistItemModel>((item) => ChecklistItemModel(text: item)).toList();
+                  .map<ChecklistItemModel>(
+                      (item) => ChecklistItemModel(text: item))
+                  .toList();
 
               Grocery grocery = Grocery(
                   id: res.doc.id,
-                  checklist:
-                      ChecklistModel(items: checklistitems, date: data["date"].toDate()),
+                  checklist: ChecklistModel(
+                      items: checklistitems, date: data["date"].toDate()),
                   isDone: data["isDone"],
                   user: AppUser(
                       id: value.id,
@@ -173,8 +174,8 @@ class _ChecklistScreen extends State<ChecklistScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Container(
-
-                  height: MediaQuery.of(context).size.height - 130 - 112 - 70 - 15,
+                  height:
+                      MediaQuery.of(context).size.height - 130 - 112 - 70 - 15,
                   child: ListView.builder(
                       itemCount: _groceries.length,
                       itemBuilder: (context, index) {
@@ -240,14 +241,12 @@ class _ChecklistScreen extends State<ChecklistScreen> {
 }
 
 class Grocery {
-
   String id;
   ChecklistModel checklist;
   bool isDone;
   AppUser user;
 
-  Grocery({String id, this.checklist, this.isDone, this.user});
-
+  Grocery({this.id, this.checklist, this.isDone, this.user});
 
   String toString() {
     return '{checklist: ${this.checklist}, isDone: ${this.isDone}, user: $user}';
