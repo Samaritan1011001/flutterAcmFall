@@ -10,96 +10,46 @@ import 'package:flutterAcmFall/model/auth_model.dart';
 import 'dart:async';
 
 class MyGroceryListsScreen extends StatefulWidget {
+  List<Grocery> userGroceries = [];
+  AppUser user = AppUser(id: null, group: null, photo: null);
+  MyGroceryListsScreen({this.userGroceries, this.user});
   _MyGroceryListsScreen createState() => _MyGroceryListsScreen();
 }
 
 class _MyGroceryListsScreen extends State<MyGroceryListsScreen> {
   final firestoreInstance = FirebaseFirestore.instance;
-  StreamSubscription<QuerySnapshot> _listener;
 
   List<Grocery> myGroceryList = [];
-  AppUser _user = AppUser(id: null, group: null, photo: null);
 
   @override
   void initState() {
     super.initState();
-    User currentUser = Provider.of<AuthModel>(context, listen: false).getUser();
-    firestoreInstance
-        .collection("users")
-        .doc(currentUser.uid)
-        .get()
-        .then((userValue) {
-      _user.id = currentUser.uid;
-      _user.group = userValue.data()["group"];
-      _user.photo = userValue.data()["photoUrl"];
-      _listener = firestoreInstance
-          .collection("groceries")
-          .where("group", isEqualTo: userValue.data()["group"].toString())
-          .where("user", isEqualTo: currentUser.uid)
-          .snapshots()
-          .listen((result) {
-        result.docChanges.forEach((res) {
-          int idx =
-              myGroceryList.indexWhere((grocery) => grocery.id == res.doc.id);
-          if (res.doc.data()["isActive"]) {
-            Map data = res.doc.data();
-            firestoreInstance
-                .collection("users")
-                .doc(data["user"])
-                .get()
-                .then((value) {
-              List<ChecklistItemModel> checklistitems = data["checklist"]
-                  .map<ChecklistItemModel>(
-                      (item) => ChecklistItemModel(text: item))
-                  .toList();
-
-              Grocery grocery = Grocery(
-                  id: res.doc.id,
-                  checklist: ChecklistModel(
-                      items: checklistitems, date: data["date"].toDate()),
-                  isDone: data["isDone"],
-                  user: AppUser(
-                      id: value.id,
-                      group: userValue["group"],
-                      photo: value.data()["photoUrl"]));
-              if (idx == -1) {
-                setState(() {
-                  myGroceryList.add(grocery);
-                });
-              } else {
-                setState(() {
-                  myGroceryList[idx] = grocery;
-                });
-              }
-            });
-          } else {
-            if (idx != -1) {
-              setState(() {
-                myGroceryList.removeAt(idx);
-              });
-            }
-          }
-        });
-      });
-    });
+    myGroceryList = widget.userGroceries;
   }
 
   @override
   void dispose() {
-    _listener.cancel();
     super.dispose();
   }
 
-  void addToGroceryList(ChecklistModel cm) {
-    myGroceryList.add(Grocery(
-        checklist: cm, isDone: false, user: AppUser(id: "A1", group: " ")));
-    print(myGroceryList.length);
-    print(myGroceryList);
+  void addToGroceryList(ChecklistModel cm, bool createNew, String gid) {
+    if (createNew) {
+      myGroceryList.add(Grocery(checklist: cm, isDone: false, user: widget.user));
+//      print(myGroceryList.length);
+//      print(myGroceryList);
+    } else {
+      int ind = myGroceryList.indexWhere((element) => element.id == gid);
+      if (ind != -1) {
+        myGroceryList[ind].checklist = cm;
+      }
+    }
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    print("myGroceryList : ${myGroceryList}");
+
     return Scaffold(
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
@@ -108,8 +58,9 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen> {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ChecklistCreationScreen(
                     callback: addToGroceryList,
-                    checklistModel:
-                        ChecklistModel(date: DateTime.now(), items: []),
+                    checklistModel: ChecklistModel(date: DateTime.now(), items: []),
+                    user: widget.user,
+                    groceryId: null,
                     createNew: true)));
           },
         ),
@@ -117,11 +68,7 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen> {
             toolbarHeight: 80,
             backgroundColor: Colors.white,
             shadowColor: Colors.transparent,
-            title: Text("My Grocery List",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30)),
+            title: Text("My Grocery List", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 30)),
             actions: <Widget>[
               FlatButton(
                   textColor: Color.fromRGBO(0, 108, 255, 1),
@@ -130,10 +77,7 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen> {
                   },
                   child: Text(
                     "Back",
-                    style: new TextStyle(
-                        fontSize: 18,
-                        fontFamily: 'SFProText',
-                        fontWeight: FontWeight.w700),
+                    style: new TextStyle(fontSize: 18, fontFamily: 'SFProText', fontWeight: FontWeight.w700),
                   ))
             ]),
         body: ListView.builder(
@@ -144,8 +88,9 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ChecklistCreationScreen(
                             callback: addToGroceryList,
-                            user: _user,
+                            user: widget.user,
                             checklistModel: myGroceryList[index].checklist,
+                            groceryId: myGroceryList[index].id,
                             createNew: false)));
                   },
                   child: ListTile(
@@ -154,21 +99,13 @@ class _MyGroceryListsScreen extends State<MyGroceryListsScreen> {
                       onChanged: (bool value) {
                         setState(() {
                           myGroceryList[index].isDone = value;
-                          firestoreInstance
-                              .collection("groceries")
-                              .doc(myGroceryList[index].id)
-                              .update({"isDone": myGroceryList[index].isDone});
+                          firestoreInstance.collection("groceries").doc(myGroceryList[index].id).update({"isDone": myGroceryList[index].isDone});
                         });
                       },
                     ),
-                    title: Text(myGroceryList[index].checklist.items[0].text,
-                        style:
-                            TextStyle(fontFamily: 'SFProText', fontSize: 18)),
-                    subtitle: Text(
-                        DateFormat('MM/dd/yyyy – kk:mm')
-                            .format(myGroceryList[index].checklist.date),
-                        style:
-                            TextStyle(fontFamily: 'SFProText', fontSize: 14)),
+                    title: Text(myGroceryList[index].checklist.items[0].text, style: TextStyle(fontFamily: 'SFProText', fontSize: 18)),
+                    subtitle: Text(DateFormat('MM/dd/yyyy – kk:mm').format(myGroceryList[index].checklist.date),
+                        style: TextStyle(fontFamily: 'SFProText', fontSize: 14)),
                   ));
             }));
   }

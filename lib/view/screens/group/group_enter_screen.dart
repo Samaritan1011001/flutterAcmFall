@@ -34,7 +34,7 @@ class GroupEnterScreen extends StatelessWidget {
               ),
               SizedBox(height: 50),
               _createGroupButton(context),
-              SizedBox(height: 20),
+              SizedBox(height: 25),
               _joinGroupButton(context),
             ],
           ),

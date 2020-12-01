@@ -10,8 +10,11 @@ class GroupJoinScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create you group"),
-      ),
+          toolbarHeight: 80,
+          backgroundColor: Colors.teal,
+          shadowColor: Colors.transparent,
+          title: Text("Join a Group",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28))),
       body: JoinGroupForm(),
     );
   }
@@ -41,63 +44,72 @@ class JoinGroupFormState extends State<JoinGroupForm> {
     // Build a Form widget using the _formKey created above.
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            controller: keyController,
-            decoration: const InputDecoration(
-              hintText: 'Enter your group key',
-            ),
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter some text';
-              }
-              return null;
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // Validate returns true if the form is valid
-                if (_formKey.currentState.validate()) {
-                  firestoreInstance
-                      .collection("groups")
-                      .doc(keyController.text)
-                      .get()
-                      .then((res) {
-                    if (res.exists) {
-                      User currentUser =
-                          Provider.of<AuthModel>(context, listen: false)
-                              .getUser();
-                      firestoreInstance
-                          .collection("users")
-                          .doc(currentUser.uid)
-                          .update({"group": keyController.text}).then((_) {
-                        firestoreInstance
-                            .collection("groups")
-                            .doc(keyController.text)
-                            .update({
-                          "users": FieldValue.arrayUnion([currentUser.uid])
-                        }).then((_) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MyApp()),
-                          );
-                        });
-                      });
-                    } else {
-                      // TODO: non exist group key
-                    }
-                  });
+      child: Container(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+              style: TextStyle(fontSize: 20.0),
+              controller: keyController,
+              decoration: const InputDecoration(
+                hintText: 'Enter your group key',
+              ),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter some text';
                 }
+                return null;
               },
-              child: Text('Join'),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Validate returns true if the form is valid
+                  if (_formKey.currentState.validate()) {
+                    firestoreInstance
+                        .collection("groups")
+                        .doc(keyController.text)
+                        .get()
+                        .then((res) {
+                      if (res.exists) {
+                        User currentUser =
+                            Provider.of<AuthModel>(context, listen: false)
+                                .getUser();
+                        firestoreInstance
+                            .collection("users")
+                            .doc(currentUser.uid)
+                            .update({"group": keyController.text}).then((_) {
+                          firestoreInstance
+                              .collection("groups")
+                              .doc(keyController.text)
+                              .update({
+                            "users": FieldValue.arrayUnion([currentUser.uid])
+                          }).then((_) {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyApp()),
+                            );
+                          });
+                        });
+                      } else {
+                        // TODO: non exist group key
+                      }
+                    });
+                  }
+                },
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(Colors.teal)),
+                child: Text(
+                  'Join',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
