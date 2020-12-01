@@ -140,7 +140,8 @@ class _EventHomeScreen extends State<EventHomeScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-                height: MediaQuery.of(context).size.height - 130 - 112 - 70 - 15,
+                height:
+                    MediaQuery.of(context).size.height - 130 - 112 - 70 - 15,
                 child: EventList(
                   events: shareEvents,
                   user: _user,
@@ -156,7 +157,7 @@ class _EventHomeScreen extends State<EventHomeScreen> {
                     child: Container(
                         height: 100,
                         decoration: BoxDecoration(
-                            color: Color.fromRGBO(244, 94, 109, 1.0),
+                            color: Colors.red,
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 40),
