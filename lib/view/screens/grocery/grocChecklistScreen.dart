@@ -107,6 +107,7 @@ class _ChecklistScreen extends State<ChecklistScreen> {
                       (item) => ChecklistItemModel(text: item))
                   .toList();
 
+              print("res.doc.id : ${res.doc.id}");
               Grocery grocery = Grocery(
                   id: res.doc.id,
                   checklist: ChecklistModel(
@@ -247,8 +248,12 @@ class Grocery {
   AppUser user;
 
   Grocery({this.id, this.checklist, this.isDone, this.user});
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5c63363de6886c1e5866ea323b9b8ead1cd04ad0
 
   String toString() {
-    return '{checklist: ${this.checklist}, isDone: ${this.isDone}, user: $user}';
+    return '{checklist: ${this.checklist}, isDone: ${this.isDone}, user: $user, id: $id}';
   }
 }
